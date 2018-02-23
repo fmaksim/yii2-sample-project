@@ -3,7 +3,7 @@
 namespace frontend\modules\user\components;
 
 use frontend\modules\user\models\Auth;
-use frontend\modules\user\models\User;
+use frontend\models\User;
 use Yii;
 use yii\authclient\ClientInterface;
 use yii\helpers\ArrayHelper;

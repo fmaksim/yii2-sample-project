@@ -16,10 +16,13 @@ return [
         '@npm'   => '@vendor/npm-asset',
     ],
     'controllerMap' => [
-        'fixture' => [
+        /*'fixture' => [
             'class' => 'yii\console\controllers\FixtureController',
             'namespace' => 'common\fixtures',
-          ],
+          ],*/
+        'fixture' => [
+            'class' => 'yii\faker\FixtureController',
+        ],
     ],
     'components' => [
         'log' => [
