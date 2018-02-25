@@ -2,16 +2,42 @@
 
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
-use yii\helpers\Url;
+use dosamigos\fileupload\FileUpload;
 
 ?>
 
 <h3><?php echo "Hello, " . Html::encode($user->username); ?></h3>
 <br>
 <?php echo HTMLPurifier::process($user->about); ?>
+<img id="profile-picture" src="<?php echo $user->getPicture(); ?>">
 
-<hr>
-<?php if ($currentUser and !$currentUser->isIAm($user)): ?>
+<?php if ($currentUser->isIAm($user)): ?>
+    <div class="alert alert-success display-none" id="profile-image-success">Profile image updated</div>
+    <div class="alert alert-danger display-none" id="profile-image-fail"></div>
+    <?= FileUpload::widget([
+        'model' => $pictureModel,
+        'attribute' => 'picture',
+        'url' => ['/user/profile/upload-photo'], // your url, this is just for demo purposes,
+        'options' => ['enctype' => 'multipart/form-data', 'accept' => 'image/*'],
+        'clientEvents' => [
+            'fileuploaddone' => 'function(e, data) {
+                if (data.result.success) {
+                    $("#profile-picture").attr("src", data.result.pictureUri);
+                    $("#alert-success").show();
+                    $("#profile-image-fail").hide();
+                    location.reload();
+                } else {
+                    $("#profile-image-fail").html(data.result.errors.picture).show();
+                }
+            }',
+
+        ],
+    ]); ?>
+    <?php if ($currentUser->getPicture() !== $currentUser::DEFAULT_IMAGE): ?>
+        <?php echo Html::a("Remove photo", ["/user/profile/delete-photo/"], ["class" => "btn btn-danger"]); ?>
+    <?php endif; ?>
+    <hr>
+<?php else: ?>
     <?php if ($currentUser->isCanSubscribe($user)) echo Html::a("Subscribe", ["/user/profile/subscribe", "id" => $user->id], [
         "class" => "btn btn-primary"
     ]); ?>
@@ -20,20 +46,19 @@ use yii\helpers\Url;
         "style" => "margin-left:5px;"
     ]);
     ?>
-<?php endif; ?>
-<hr>
-<?php if ($currentUser and $currentUser->isShowFollowBlock($mutuals = $currentUser->getMutualSubscriptionsTo($user))): ?>
-    <h5>Users, who also followed <?php echo Html::encode($user->username); ?></h5>
-    <div class="row">
-        <div class="col-md-12">
-            <?php foreach ($mutuals as $mutual): ?>
-                <?php echo Html::a(Html::encode($mutual["username"]), ["/user/profile/view/", "nickname" => $mutual["nickname"] ? $mutual["nickname"] : $mutual["id"]]); ?>
-                <br>
-            <?php endforeach; ?>
+    <?php if ($currentUser and $currentUser->isShowFollowBlock($mutuals = $currentUser->getMutualSubscriptionsTo($user))): ?>
+        <h5>Users, who also followed <?php echo Html::encode($user->username); ?></h5>
+        <div class="row">
+            <div class="col-md-12">
+                <?php foreach ($mutuals as $mutual): ?>
+                    <?php echo Html::a(Html::encode($mutual["username"]), ["/user/profile/view/", "nickname" => $mutual["nickname"] ? $mutual["nickname"] : $mutual["id"]]); ?>
+                    <br>
+                <?php endforeach; ?>
+            </div>
         </div>
-    </div>
+    <?php endif; ?>
 <?php endif; ?>
-<hr>
+
 <?php echo Html::button("Subscriptions " . $user->getSubscriptionsCount(), [
     "class" => "btn btn-primary",
     "data-toggle" => "modal",

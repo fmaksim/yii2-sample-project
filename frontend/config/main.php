@@ -54,6 +54,9 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
+        'fileStorage' => [
+            'class' => 'frontend\components\Storage',
+        ],
     ],
     'params' => $params,
 ];

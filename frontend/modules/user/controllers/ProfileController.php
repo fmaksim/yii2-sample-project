@@ -6,8 +6,9 @@ use Yii;
 use yii\web\Controller;
 use frontend\models\User;
 use yii\web\NotFoundHttpException;
-use frontend\modules\user\models\forms\PictureForm;
+use yii\web\Response;
 use yii\web\UploadedFile;
+use frontend\modules\user\models\forms\PictureForm;
 
 /**
  * Default controller for the `user` module
@@ -38,17 +39,49 @@ class ProfileController extends Controller
     public function actionUploadPhoto()
     {
 
-        $pictureModel = new PictureForm();
-        $pictureModel->picture = UploadedFile::getInstance($pictureModel, "picture");
+        Yii::$app->response->format = Response::FORMAT_JSON;
 
+        $pictureModel = new PictureForm();
+
+        $pictureModel->picture = UploadedFile::getInstance($pictureModel, "picture");
         if ($pictureModel->validate()) {
-            echo "OK";
-            die();
+
+            $user = Yii::$app->user->identity;
+            $user->picture = Yii::$app->fileStorage->saveUploadedFile($pictureModel->picture);
+
+            if ($user->save(false, ["picture"])) {
+                return [
+                    "success" => true,
+                    "pictureUri" => Yii::$app->fileStorage->getFile($user->picture),
+                ];
+            }
+
+        } else {
+            return [
+                "success" => false,
+                "errors" => $pictureModel->getErrors(),
+            ];
         }
 
-        print_r($pictureModel->getErrors());
-        die();
+    }
 
+    public function actionDeletePhoto()
+    {
+
+        if (Yii::$app->user->isGuest)
+            return $this->redirect(["/"]);
+
+        $currentUser = Yii::$app->user->identity;
+
+        if (Yii::$app->fileStorage->deleteFile($currentUser->picture)) {
+            Yii::$app->session->setFlash("success", "File has been removed successfully!");
+            $currentUser->picture = null;
+            $currentUser->save(false, ["picture"]);
+        } else {
+            Yii::$app->session->setFlash("error", "Permission denied!");
+        }
+
+        return $this->redirect(["/user/profile/view", "nickname" => $currentUser->getNickname()]);
     }
 
     public function actionSubscribe($id)
@@ -73,26 +106,6 @@ class ProfileController extends Controller
         }
         throw new NotFoundHttpException();
     }
-
-    /*public function actionTest()
-    {
-        $faker = \Faker\Factory::create();
-
-        for($i = 0; $i < 1000; $i++){
-            $user = new User();
-            $user->about = $faker->text(200);
-            $user->nickname = $faker->regexify("[A-Za-z0-9_]{5,15}");
-            $user->username = $faker->name;
-            $user->password_hash = Yii::$app->security->generateRandomString();
-            $user->auth_key = Yii::$app->security->generateRandomString();
-            $user->created_at = time();
-            $user->updated_at = time();
-            $user->email = $faker->email;
-
-            $user->save(false);
-        }
-
-    }*/
 
     public function actionUnsubscribe($id)
     {
