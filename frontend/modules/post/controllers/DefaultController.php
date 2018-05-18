@@ -2,6 +2,7 @@
 
 namespace frontend\modules\post\controllers;
 
+use frontend\services\LikeService;
 use Yii;
 use yii\web\Controller;
 use frontend\models\Post;
@@ -15,6 +16,7 @@ use yii\web\Response;
  */
 class DefaultController extends Controller
 {
+
     /**
      * Renders the index view for the module
      * @return string
@@ -51,8 +53,6 @@ class DefaultController extends Controller
     {
         $post = $this->findPostById($id);
 
-        $post->setLikesStorage(Yii::$app->redis);
-
         return $this->render('view', [
                 "post" => $post,
                 "currentUser" => Yii::$app->user->identity,
@@ -70,30 +70,28 @@ class DefaultController extends Controller
         throw new NotFoundHttpException();
     }
 
-    public function actionLike()
+    public function actionToggleLike()
     {
-
         if (Yii::$app->user->isGuest)
             return $this->goHome();
 
         Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $currentUser = Yii::$app->user->identity;
         $post = $this->findPostById(Yii::$app->request->post("id"));
 
-        $post->setLikesStorage(Yii::$app->redis);
-
-        if ($post->doLike($currentUser)) {
+        try {
+            Yii::$app->likeService->setType("post");
+            $result = Yii::$app->likeService->toggleLike($post);
             return [
-                "success" => true,
-                "likesCount" => $post->countLikes()
+                "success" => $result ? true : false,
+                "likesCount" => $post->getCountLikes()
             ];
-        } else {
+        } catch (\Exception $e) {
             return [
-                "error" => true,
-                "likesCount" => $post->countLikes()
+                "success" => false,
+                "likesCount" => $post->getCountLikes()
             ];
         }
+
 
     }
 
@@ -108,17 +106,16 @@ class DefaultController extends Controller
         $currentUser = Yii::$app->user->identity;
 
         $post = $this->findPostById(Yii::$app->request->post("id"));
-        $post->setLikesStorage(Yii::$app->redis);
 
         if ($post->doUnlike($currentUser)) {
             return [
                 "success" => true,
-                "likesCount" => $post->countLikes()
+                "likesCount" => $post->getCountLikes()
             ];
         } else {
             return [
                 "error" => true,
-                "likesCount" => $post->countLikes()
+                "likesCount" => $post->getCountLikes()
             ];
         }
     }

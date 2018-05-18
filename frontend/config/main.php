@@ -61,6 +61,12 @@ return [
         'fileStorage' => [
             'class' => 'frontend\components\Storage',
         ],
+        'likeStorage' => [
+            'class' => 'frontend\components\LikeStorage',
+        ],
+        'likeService' => [
+            'class' => 'frontend\services\LikeService',
+        ],
     ],
     'params' => $params,
 ];

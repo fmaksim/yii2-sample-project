@@ -11,7 +11,7 @@ use dosamigos\fileupload\FileUpload;
 <?php echo HTMLPurifier::process($user->about); ?>
 <img id="profile-picture" src="<?php echo $user->getPicture(); ?>">
 
-<?php if ($currentUser->isIAm($user)): ?>
+<?php if ($currentUser && $currentUser->isIAm($user)): ?>
     <div class="alert alert-success display-none" id="profile-image-success">Profile image updated</div>
     <div class="alert alert-danger display-none" id="profile-image-fail"></div>
     <?= FileUpload::widget([
@@ -38,10 +38,12 @@ use dosamigos\fileupload\FileUpload;
     <?php endif; ?>
     <hr>
 <?php else: ?>
-    <?php if ($currentUser->isCanSubscribe($user)) echo Html::a("Subscribe", ["/user/profile/subscribe", "id" => $user->id], [
+    <?php if ($currentUser && $currentUser->isCanSubscribe($user)) echo Html::a("Subscribe",
+        ["/user/profile/subscribe", "id" => $user->id], [
         "class" => "btn btn-primary"
     ]); ?>
-    <?php if ($currentUser->isCanUnSubscribe($user)) echo Html::a("UnSubscribe", ["/user/profile/unsubscribe", "id" => $user->id], [
+    <?php if ($currentUser && $currentUser->isCanUnSubscribe($user)) echo Html::a("UnSubscribe",
+        ["/user/profile/unsubscribe", "id" => $user->id], [
         "class" => "btn btn-primary",
         "style" => "margin-left:5px;"
     ]);
