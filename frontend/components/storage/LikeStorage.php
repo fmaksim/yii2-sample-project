@@ -1,7 +1,6 @@
 <?php
 
-namespace frontend\components;
-
+namespace frontend\components\storage;
 
 use yii\base\Component;
 use Yii;

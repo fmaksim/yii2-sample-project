@@ -1,9 +1,8 @@
 <?php
 
-namespace frontend\services;
+namespace frontend\components;
 
-
-use frontend\components\LikeStorage;
+use frontend\components\storage\LikeStorage;
 use yii\base\Component;
 use yii\base\InvalidCallException;
 use Yii;
@@ -20,7 +19,7 @@ class LikeService extends Component
     public function __construct(LikeStorage $storage, $config = [])
     {
         $this->storage = $storage->getStorage();
-        $this->userId = Yii::$app->user->identity->getId();
+        $this->userId = Yii::$app->user->identity ? Yii::$app->user->identity->getId() : null;
         parent::__construct($config);
     }
 

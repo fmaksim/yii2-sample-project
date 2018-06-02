@@ -5,7 +5,7 @@ namespace frontend\modules\post\models\forms;
 use Yii;
 use yii\base\Model;
 use frontend\models\User;
-use frontend\components\StorageInterface;
+use frontend\components\storage\StorageInterface;
 use frontend\models\Post;
 
 class PostForm extends Model

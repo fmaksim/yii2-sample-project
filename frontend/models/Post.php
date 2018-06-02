@@ -2,12 +2,8 @@
 
 namespace frontend\models;
 
-use frontend\components\LikeStorage;
-use frontend\components\Storage;
-use frontend\services\LikeService;
-use Yii;
-use frontend\models\User;
-use yii\base\Component;
+use frontend\components\storage\Storage;
+use frontend\components\LikeService;
 
 /**
  * This is the model class for table "post".
@@ -38,17 +34,11 @@ class Post extends \yii\db\ActiveRecord
         return \Yii::$container->get(static::class);
     }
 
-    /**
-     * @inheritdoc
-     */
     public static function tableName()
     {
         return 'post';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -60,9 +50,19 @@ class Post extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getId()
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getId(): int
     {
         return $this->id;
+    }
+
+    public function isLiked()
+    {
+        return $this->likeService->isLiked($this);
     }
 
     public function getCountLikes()
@@ -73,16 +73,6 @@ class Post extends \yii\db\ActiveRecord
     public function getImage()
     {
         return $this->fileStorage->getFile($this->filename);
-    }
-
-    public function getUser()
-    {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
-
-    public function isLiked()
-    {
-        return $this->likeService->isLiked($this);
     }
 
 }
