@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use frontend\components\storage\Storage;
 use frontend\components\LikeService;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "post".
@@ -29,32 +30,6 @@ class Post extends \yii\db\ActiveRecord
         parent::__construct($config);
     }
 
-    public static function instantiate($row)
-    {
-        return \Yii::$container->get(static::class);
-    }
-
-    public static function tableName()
-    {
-        return 'post';
-    }
-
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'description' => 'Description',
-            'filename' => 'Filename',
-            'user_id' => 'User ID',
-            'created_at' => 'Created At',
-        ];
-    }
-
-    public function getUser()
-    {
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
-    }
-
     public function getId(): int
     {
         return $this->id;
@@ -73,6 +48,50 @@ class Post extends \yii\db\ActiveRecord
     public function getImage()
     {
         return $this->fileStorage->getFile($this->filename);
+    }
+
+    public static function instantiate($row)
+    {
+        return \Yii::$container->get(static::class);
+    }
+
+    public static function tableName()
+    {
+        return 'post';
+    }
+
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                ],
+            ],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'description' => 'Description',
+            'filename' => 'Filename',
+            'user_id' => 'User ID',
+            'created_at' => 'Created At',
+        ];
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function getComments()
+    {
+        return $this->hasMany(Comment::className(), ['post_id' => 'id'])
+            ->orderBy(['created_at' => SORT_DESC]);
     }
 
 }

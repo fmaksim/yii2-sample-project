@@ -5,6 +5,7 @@
  * @var $post frontend\models\Post
  */
 
+use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
 
@@ -38,7 +39,33 @@ use yii\web\JqueryAsset;
             </a>
 
         </div>
+        <?php if (!Yii::$app->user->isGuest): ?>
+            <div class="col-md-12">
+                <?php $form = ActiveForm::begin(["action" => "/post/" . $post->id . "/comment"]); ?>
+                <div class="form-group">
+                    <h3>Post a comment</h3>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Example textarea</label>
+                    <textarea name="message" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+                <?php echo Html::submitButton("Add comment", ["class" => "btn btn-primary"]); ?>
+                <?php ActiveForm::end(); ?>
+            </div>
+        <?php endif; ?>
 
+        <?php if (count($post->comments) > 0): ?>
+            <div class="col-md-12">
+                <h3>Comments:</h3>
+                <?php foreach ($post->comments as $comment): ?>
+                    <div class="row">
+                        <div class="well well-lg"><?php echo $comment->getDate() . " " . $comment->username; ?></div>
+                        <div><?php echo Html::encode($comment->text); ?></div>
+                    </div>
+                    <hr>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 

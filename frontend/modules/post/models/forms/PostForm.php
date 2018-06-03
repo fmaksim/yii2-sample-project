@@ -51,7 +51,6 @@ class PostForm extends Model
             $this->post->filename = $this->storageService->saveUploadedFile($this->filename);
             $this->post->description = $this->description;
             $this->post->user_id = $this->user->getId();
-            $this->post->created_at = time();
 
             if ($this->post->save(false)) {
                 return true;

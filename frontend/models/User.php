@@ -139,6 +139,11 @@ class User extends ActiveRecord implements IdentityInterface
         return ($this->picture) ? Yii::$app->fileStorage->getFile($this->picture) : self::DEFAULT_IMAGE;
     }
 
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
     /**
      * @inheritdoc
      */

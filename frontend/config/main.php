@@ -18,6 +18,9 @@ return [
         'post' => [
             'class' => 'frontend\modules\post\Module',
         ],
+        'comment' => [
+            'class' => 'frontend\modules\comment\Module',
+        ],
     ],
     'components' => [
         'request' => [
@@ -50,6 +53,7 @@ return [
             'rules' => [
                 'profile/<nickname:\w+>' => 'user/profile/view',
                 'post/<id:\d+>' => 'post/default/view',
+                'post/<postId:\d+>/comment' => 'comment/default/create',
             ],
         ],
         'redis' => [
@@ -59,13 +63,7 @@ return [
             'database' => 0,
         ],
         'fileStorage' => [
-            'class' => 'frontend\components\Storage',
-        ],
-        'likeStorage' => [
-            'class' => 'frontend\components\LikeStorage',
-        ],
-        'likeService' => [
-            'class' => 'frontend\services\LikeService',
+            'class' => 'frontend\components\storage\Storage',
         ],
     ],
     'params' => $params,
