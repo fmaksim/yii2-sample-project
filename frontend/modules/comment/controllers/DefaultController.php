@@ -68,12 +68,17 @@ class DefaultController extends Controller
     public function actionDelete(int $id)
     {
 
-        $comment = $this->commentService->findById($id);
-
         try {
-
+            if ($this->commentService->remove($id)) {
+                Yii::$app->session->setFlash("success", "Comment succefully removed!");
+                return $this->redirect(Yii::$app->request->referrer);
+            } else {
+                Yii::$app->session->setFlash("error", "Comment deleting error!");
+                return $this->redirect(Yii::$app->request->referrer);
+            }
         } catch (\Exception $e) {
-
+            Yii::$app->session->setFlash("error", $e->getMessage());
+            return $this->goHome();
         }
 
     }

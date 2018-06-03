@@ -41,7 +41,7 @@ use yii\web\JqueryAsset;
         </div>
         <?php if (!Yii::$app->user->isGuest): ?>
             <div class="col-md-12">
-                <?php $form = ActiveForm::begin(["action" => "/post/" . $post->id . "/comment"]); ?>
+                <?php $commentForm = ActiveForm::begin(["action" => "/post/" . $post->id . "/comment"]); ?>
                 <div class="form-group">
                     <h3>Post a comment</h3>
                 </div>
@@ -62,7 +62,14 @@ use yii\web\JqueryAsset;
                         <div class="well well-lg">
                             <?php echo $comment->getDate() . " " . $comment->username; ?>
                             <?php if (Yii::$app->user->identity && $comment->user_id === Yii::$app->user->identity->getId()): ?>
-                                <?php echo Html::a('Edit', ['/comment/edit/' . $comment->id]) ?>
+                                <?php echo Html::a('Edit', ["/comment/edit/" . $comment->id]) ?>
+                                <?php $deleteCommentForm = ActiveForm::begin([
+                                    "action" => "/comment/delete/" . $comment->id,
+                                    "id" => "form" . $comment->id
+                                ]); ?>
+                                <?php echo Html::a("Remove", ["/comment/delete/" . $comment->id],
+                                    ["class" => "remove-comment", "data-form" => "form" . $comment->id]) ?>
+                                <?php ActiveForm::end(); ?>
                             <?php endif; ?>
                         </div>
                         <div><?php echo Html::encode($comment->text); ?></div>
@@ -75,3 +82,4 @@ use yii\web\JqueryAsset;
 </div>
 
 <?php $this->registerJsFile('@web/js/likes.js', ["depends" => JqueryAsset::className()]); ?>
+<?php $this->registerJsFile('@web/js/remove-comment.js', ["depends" => JqueryAsset::className()]); ?>

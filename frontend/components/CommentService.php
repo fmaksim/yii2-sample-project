@@ -51,9 +51,17 @@ class CommentService
 
     }
 
-    public function remove()
+    public function remove(int $id): bool
     {
-
+        $comment = $this->findById($id);
+        if ($comment) {
+            if ($comment->delete()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     public function findById(int $id): Comment
