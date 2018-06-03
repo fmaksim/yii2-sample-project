@@ -27,59 +27,63 @@ class DefaultController extends Controller
         $this->commentService = $commentService;
     }
 
+    public function behaviors()
+    {
+        return [
+            'auth' => [
+                'class' => 'frontend\components\behaviors\Guest',
+            ]
+        ];
+    }
+
     public function actionCreate(int $postId)
     {
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash("error", "You must login before posting comment");
-            return $this->goHome();
-        }
-        $this->postService->findById($postId);
 
         try {
 
-            $user = Yii::$app->user->identity;
-            $text = Yii::$app->request->post("text");
-            $result = $this->commentService->add($postId, $user, $text);
+            if ($this->postService->isExist($postId)) {
+                $user = Yii::$app->user->identity;
+                $text = Yii::$app->request->post("text");
 
-            if ($result) {
-                Yii::$app->session->setFlash("success", "Comment succefully added!");
-                return $this->redirect(Yii::$app->request->referrer);
-            } else {
-                Yii::$app->session->setFlash("error",
-                    "Some error with saving comment, please contact our support service");
-                return $this->redirect(Yii::$app->request->referrer);
+                if ($this->commentService->add($postId, $user, $text)) {
+
+                    Yii::$app->session->setFlash("success", "Comment succefully added!");
+                    return $this->redirect(Yii::$app->request->referrer);
+
+                } else {
+
+                    Yii::$app->session->setFlash("error",
+                        "Some error with saving comment, please contact our support service");
+                    return $this->redirect(Yii::$app->request->referrer);
+
+                }
             }
+
         } catch (\Exception $e) {
             Yii::$app->session->setFlash("error", $e->getMessage());
             return $this->goHome();
         }
     }
 
-    public function actionDelete()
+    public function actionDelete(int $id)
     {
 
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash("error", "You must login before removing comment");
-            return $this->goHome();
-        }
+        $comment = $this->commentService->findById($id);
 
         try {
 
         } catch (\Exception $e) {
 
         }
+
     }
 
     public function actionEdit(int $id)
     {
 
-        if (Yii::$app->user->isGuest) {
-            Yii::$app->session->setFlash("error", "You must login before editing comment");
-            return $this->goHome();
-        }
         $comment = $this->commentService->findById($id);
 
-        if (Yii::$app->request->post()) {
+        if (Yii::$app->request->isPost) {
             try {
                 $text = Yii::$app->request->post("Comment")["text"];
 

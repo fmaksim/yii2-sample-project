@@ -34,6 +34,15 @@ class PostService
 
     }
 
+    public function isExist(int $id): bool
+    {
+        if ($this->findById($id)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function toggleLike(Post $post): bool
     {
 

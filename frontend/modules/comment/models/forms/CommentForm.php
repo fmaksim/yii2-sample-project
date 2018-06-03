@@ -27,5 +27,4 @@ class CommentForm extends Model
         return '';
     }
 
-
 }
