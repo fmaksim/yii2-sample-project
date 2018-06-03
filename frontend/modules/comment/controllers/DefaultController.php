@@ -27,15 +27,6 @@ class DefaultController extends Controller
         $this->commentService = $commentService;
     }
 
-    /**
-     * Renders the index view for the module
-     * @return string
-     */
-    public function actionIndex()
-    {
-        return $this->render('index');
-    }
-
     public function actionCreate(int $postId)
     {
         if (Yii::$app->user->isGuest) {
@@ -47,8 +38,8 @@ class DefaultController extends Controller
         try {
 
             $user = Yii::$app->user->identity;
-            $message = Yii::$app->request->post("message");
-            $result = $this->commentService->add($postId, $user, $message);
+            $text = Yii::$app->request->post("text");
+            $result = $this->commentService->add($postId, $user, $text);
 
             if ($result) {
                 Yii::$app->session->setFlash("success", "Comment succefully added!");
@@ -66,6 +57,12 @@ class DefaultController extends Controller
 
     public function actionDelete()
     {
+
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash("error", "You must login before removing comment");
+            return $this->goHome();
+        }
+
         try {
 
         } catch (\Exception $e) {
@@ -73,13 +70,41 @@ class DefaultController extends Controller
         }
     }
 
-    public function actionEdit()
+    public function actionEdit(int $id)
     {
-        try {
 
-        } catch (\Exception $e) {
-
+        if (Yii::$app->user->isGuest) {
+            Yii::$app->session->setFlash("error", "You must login before editing comment");
+            return $this->goHome();
         }
+        $comment = $this->commentService->findById($id);
+
+        if (Yii::$app->request->post()) {
+            try {
+                $text = Yii::$app->request->post("Comment")["text"];
+
+                if ($this->commentService->edit($comment, $text)) {
+
+                    Yii::$app->session->setFlash("success", "Comment succefully updated!");
+                    return $this->redirect(Yii::$app->request->referrer);
+
+                } else {
+
+                    Yii::$app->session->setFlash("error",
+                        "Some error with saving comment, please contact our support service");
+                    return $this->redirect(Yii::$app->request->referrer);
+
+                }
+
+            } catch (\Exception $e) {
+
+                Yii::$app->session->setFlash("error", $e->getMessage());
+                return $this->refresh();
+
+            }
+        }
+
+        return $this->render('edit', ["comment" => $comment]);
     }
 
 }

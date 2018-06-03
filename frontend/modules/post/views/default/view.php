@@ -46,8 +46,8 @@ use yii\web\JqueryAsset;
                     <h3>Post a comment</h3>
                 </div>
                 <div class="form-group">
-                    <label for="exampleFormControlTextarea1">Example textarea</label>
-                    <textarea name="message" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <label for="post-comment">Your comment</label>
+                    <textarea name="text" class="form-control" id="post-comment" rows="3"></textarea>
                 </div>
                 <?php echo Html::submitButton("Add comment", ["class" => "btn btn-primary"]); ?>
                 <?php ActiveForm::end(); ?>
@@ -59,7 +59,12 @@ use yii\web\JqueryAsset;
                 <h3>Comments:</h3>
                 <?php foreach ($post->comments as $comment): ?>
                     <div class="row">
-                        <div class="well well-lg"><?php echo $comment->getDate() . " " . $comment->username; ?></div>
+                        <div class="well well-lg">
+                            <?php echo $comment->getDate() . " " . $comment->username; ?>
+                            <?php if (Yii::$app->user->identity && $comment->user_id === Yii::$app->user->identity->getId()): ?>
+                                <?php echo Html::a('Edit', ['/comment/edit/' . $comment->id]) ?>
+                            <?php endif; ?>
+                        </div>
                         <div><?php echo Html::encode($comment->text); ?></div>
                     </div>
                     <hr>

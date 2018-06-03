@@ -23,15 +23,6 @@ class DefaultController extends Controller
         $this->postService = $postService;
     }
 
-    /**
-     * Renders the index view for the module
-     * @return string
-     */
-    public function actionIndex()
-    {
-        return $this->render('index');
-    }
-
     public function actionCreate()
     {
         if (Yii::$app->user->isGuest)

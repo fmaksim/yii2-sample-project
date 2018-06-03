@@ -54,6 +54,7 @@ return [
                 'profile/<nickname:\w+>' => 'user/profile/view',
                 'post/<id:\d+>' => 'post/default/view',
                 'post/<postId:\d+>/comment' => 'comment/default/create',
+                'comment/edit/<id:\d+>' => 'comment/default/edit'
             ],
         ],
         'redis' => [

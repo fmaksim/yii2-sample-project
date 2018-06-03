@@ -6,15 +6,25 @@ use yii\base\Model;
 
 class CommentForm extends Model
 {
-    const MAX_MESSAGE_LENGTH = 3000;
+    const MAX_TEXT_LENGTH = 3000;
 
-    public $message;
+    public $text;
+
+    public function setText($text)
+    {
+        $this->text = $text;
+    }
 
     public function rules()
     {
         return [
-            ["message", "string", "max" => self::MAX_MESSAGE_LENGTH],
+            ["text", "string", "max" => self::MAX_TEXT_LENGTH],
         ];
+    }
+
+    public function formName()
+    {
+        return '';
     }
 
 

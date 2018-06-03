@@ -2,11 +2,10 @@
 
 namespace frontend\components;
 
-
 use frontend\models\Comment;
 use frontend\models\User;
 use frontend\modules\comment\models\forms\CommentForm;
-use Yii;
+use yii\web\NotFoundHttpException;
 
 class CommentService
 {
@@ -16,7 +15,9 @@ class CommentService
 
         $comment = $this->create();
         $form = new CommentForm();
-        if ($form->load(Yii::$app->request->post(), '') && $form->validate()) {
+        $form->setText($text);
+
+        if ($form->validate()) {
             $comment->post_id = $postId;
             $comment->user_id = $user->getId();
             $comment->username = $user->getUsername();
@@ -31,19 +32,42 @@ class CommentService
 
     }
 
-    private function create(): Comment
+    public function edit(Comment $comment, $text): bool
     {
-        return new Comment();
-    }
 
-    public function edit()
-    {
+        $form = new CommentForm();
+        $form->setText($text);
+
+        if ($form->validate()) {
+            $comment->text = $text;
+
+            if ($comment->save(false)) {
+                return true;
+            }
+
+        }
+
+        return false;
 
     }
 
     public function remove()
     {
 
+    }
+
+    public function findById(int $id): Comment
+    {
+        if ($comment = Comment::findOne($id)) {
+            return $comment;
+        }
+
+        throw new NotFoundHttpException();
+    }
+
+    private function create(): Comment
+    {
+        return new Comment();
     }
 
 }
