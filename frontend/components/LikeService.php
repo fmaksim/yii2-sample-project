@@ -47,9 +47,9 @@ class LikeService extends Component
 
     }
 
-    private function isTypeNotExist(): bool
+    public function getCount($likebleObject): int
     {
-        return $this->type ? false : true;
+        return $this->storage->scard("{$this->type}:{$likebleObject->getId()}:likes");
     }
 
     public function isLiked($likebleObject): bool
@@ -57,6 +57,11 @@ class LikeService extends Component
         return $this->storage->sismember("{$this->type}:{$likebleObject->getId()}:likes", $this->userId) ?
             true :
             false;
+    }
+
+    private function isTypeNotExist(): bool
+    {
+        return $this->type ? false : true;
     }
 
     private function unlike($likebleObject): bool
@@ -79,11 +84,6 @@ class LikeService extends Component
         } catch (\Exception $e) {
             return false;
         }
-    }
-
-    public function getCount($likebleObject): int
-    {
-        return $this->storage->scard("{$this->type}:{$likebleObject->getId()}:likes");
     }
 
 }

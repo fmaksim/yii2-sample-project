@@ -2,10 +2,12 @@
 
 namespace frontend\components\storage;
 
+use Intervention\Image\ImageManager;
 use Yii;
 use yii\base\Component;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
+
 
 class Storage extends Component implements StorageInterface
 {
@@ -35,6 +37,22 @@ class Storage extends Component implements StorageInterface
         }
 
         return false;
+    }
+
+    public function resize($file)
+    {
+
+        $maxWidth = Yii::$app->params['imgSize']['maxWidth'];
+        $maxHeight = Yii::$app->params['imgSize']['maxHeight'];
+
+        $manager = new ImageManager(['driver' => 'imagick']);
+        $image = $manager->make($file->tempFile);
+
+        $image->resize($maxWidth, $maxHeight, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        })->save();
+
     }
 
     /**

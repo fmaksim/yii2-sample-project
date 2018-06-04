@@ -7,7 +7,7 @@ return [
     'storageUrl' => '/uploads/',
 
     'imgSize' => [
-        "maxWidth" => 400,
-        "maxHeight" => 300
+        "maxWidth" => 800,
+        "maxHeight" => 600
     ],
 ];

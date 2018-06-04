@@ -2,6 +2,7 @@
 
 namespace frontend\modules\post\controllers;
 
+use frontend\components\storage\Storage;
 use Yii;
 use yii\web\Controller;
 use frontend\modules\post\models\forms\PostForm;
@@ -16,11 +17,13 @@ class DefaultController extends Controller
 {
 
     protected $postService;
+    protected $fileStorage;
 
-    public function __construct($id, $module, PostService $postService, array $config = [])
+    public function __construct($id, $module, PostService $postService, Storage $fileStorage, array $config = [])
     {
         parent::__construct($id, $module, $config);
         $this->postService = $postService;
+        $this->fileStorage = $fileStorage;
     }
 
     public function actionCreate()
@@ -29,7 +32,7 @@ class DefaultController extends Controller
             return $this->goHome();
 
         $user = Yii::$app->user->identity;
-        $storage = Yii::$app->fileStorage;
+        $storage = $this->fileStorage;
         $post = $this->postService->create();
         $postForm = new PostForm($user, $storage, $post);
 
