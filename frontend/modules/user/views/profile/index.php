@@ -33,17 +33,20 @@ use dosamigos\fileupload\FileUpload;
 
         ],
     ]); ?>
-    <?php if ($currentUser->getPicture() !== $currentUser::DEFAULT_IMAGE): ?>
+    <?php if ($currentUser->getPicture()): ?>
         <?php echo Html::a("Remove photo", ["/user/profile/delete-photo/"], ["class" => "btn btn-danger"]); ?>
     <?php endif; ?>
     <hr>
 <?php else: ?>
-    <?php if ($currentUser && $currentUser->isCanSubscribe($user)) echo Html::a("Subscribe",
-        ["/user/profile/subscribe", "id" => $user->id], [
-        "class" => "btn btn-primary"
-    ]); ?>
-    <?php if ($currentUser && $currentUser->isCanUnSubscribe($user)) echo Html::a("UnSubscribe",
-        ["/user/profile/unsubscribe", "id" => $user->id], [
+    <?php if ($currentUser && !$subscriptionService->isFollowed($user)) {
+        echo Html::a(
+            $subscriptionService->isFollowed($user) ? "UnSubscribe" : "Subscribe",
+            ["/user/profile/toggle-subscribe", "id" => $user->id], [
+            "class" => "btn btn-primary"
+        ]);
+    } ?>
+    <?php if ($currentUser && $subscriptionService->isFollowed($user)) echo Html::a("UnSubscribe",
+        ["/user/profile/toggle-subscribe", "id" => $user->id], [
         "class" => "btn btn-primary",
         "style" => "margin-left:5px;"
     ]);

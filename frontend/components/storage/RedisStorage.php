@@ -5,7 +5,7 @@ namespace frontend\components\storage;
 use yii\base\Component;
 use Yii;
 
-class LikeStorage extends Component
+class RedisStorage extends Component
 {
 
     protected $storage;

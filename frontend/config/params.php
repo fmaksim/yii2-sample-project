@@ -10,4 +10,6 @@ return [
         "maxWidth" => 800,
         "maxHeight" => 600
     ],
+
+    'defaultProfileImage' => '/img/profile_default_image.jpg',
 ];

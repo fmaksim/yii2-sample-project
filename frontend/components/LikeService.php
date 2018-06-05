@@ -2,7 +2,7 @@
 
 namespace frontend\components;
 
-use frontend\components\storage\LikeStorage;
+use frontend\components\storage\RedisStorage;
 use yii\base\Component;
 use yii\base\InvalidCallException;
 use Yii;
@@ -16,7 +16,7 @@ class LikeService extends Component
     protected $type;
     protected $userId;
 
-    public function __construct(LikeStorage $storage, $config = [])
+    public function __construct(RedisStorage $storage, $config = [])
     {
         $this->storage = $storage->getStorage();
         $this->userId = Yii::$app->user->identity ? Yii::$app->user->identity->getId() : null;
