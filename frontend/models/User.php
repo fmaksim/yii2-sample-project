@@ -39,7 +39,7 @@ class User extends ActiveRecord implements IdentityInterface
         parent::__construct($config);
         $this->subscriptionService = Yii::createObject(['class' => 'frontend\components\SubscriptionService']);
         $this->fileStorage = Yii::createObject(['class' => 'frontend\components\storage\Storage']);
-        $this->redisStorage = Yii::createObject(['class' => 'frontend\components\storage\RedisStorage'])->storage;
+        $this->redisStorage = Yii::createObject(['class' => 'frontend\components\storage\RedisStorage'])->getStorage();
     }
 
     public static function tableName()
@@ -206,45 +206,55 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
-    public function getSubscriptions()
+    public function getFeed(int $limit): array
+    {
+        $order = ["post_created_at" => SORT_DESC];
+        return $this
+            ->hasMany(Feed::className(), ["user_id" => "id"])
+            ->orderBy($order)
+            ->limit($limit)
+            ->all();
+    }
+
+    public function getSubscriptions(): array
     {
 
         $key = "user:{$this->getId()}:subscriptions";
-        $idS = $this->redisStorage->smembers($key);
+        $ids = $this->redisStorage->smembers($key);
 
         return User::find()->select("username, nickname, id")
-            ->where(["id" => $idS])
+            ->where(["id" => $ids])
             ->orderBy("username")
             ->asArray()
             ->all();
     }
 
-    public function getFollowers()
+    public function getFollowers(): array
     {
 
         $key = "user:{$this->getId()}:followers";
-        $idS = $this->redisStorage->smembers($key);
+        $ids = $this->redisStorage->smembers($key);
 
         return User::find()
             ->select("username, nickname, id")
-            ->where(["id" => $idS])
+            ->where(["id" => $ids])
             ->orderBy("username")
             ->asArray()
             ->all();
 
     }
 
-    public function getFollowersCount()
+    public function getFollowersCount(): int
     {
         return $this->redisStorage->scard("user:{$this->getId()}:followers");
     }
 
-    public function getSubscriptionsCount()
+    public function getSubscriptionsCount(): int
     {
         return $this->redisStorage->scard("user:{$this->getId()}:subscriptions");
     }
 
-    public function getMutualSubscriptionsTo(User $user)
+    public function getMutualSubscriptionsTo(User $user): array
     {
 
         $ownSubscriptions = "user:{$this->getId()}:subscriptions";
@@ -261,12 +271,12 @@ class User extends ActiveRecord implements IdentityInterface
 
     }
 
-    public function isShowFollowBlock($mutualSubscriptions)
+    public function isShowFollowBlock($mutualSubscriptions): bool
     {
         return (count($mutualSubscriptions) > 0 and !Yii::$app->user->isGuest) ? true : false;
     }
 
-    public function isIAm(User $user)
+    public function isIAm(User $user): bool
     {
         return ($this->getId() === $user->getId()) ? true : false;
     }

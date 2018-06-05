@@ -2,10 +2,9 @@
 
 namespace frontend\events;
 
-use yii\base\Component;
 use yii\base\Event;
 
-class PostAddedEvent extends Event
+class UploadedPhotoEvent extends Event
 {
 
     public $tempFile;

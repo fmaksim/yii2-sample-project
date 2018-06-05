@@ -2,6 +2,7 @@
 
 namespace frontend\modules\post\controllers;
 
+use frontend\components\FeedService;
 use frontend\components\storage\Storage;
 use Yii;
 use yii\web\Controller;
@@ -18,23 +19,33 @@ class DefaultController extends Controller
 
     protected $postService;
     protected $fileStorage;
+    protected $feedService;
 
-    public function __construct($id, $module, PostService $postService, Storage $fileStorage, array $config = [])
-    {
+    public function __construct(
+        $id,
+        $module,
+        PostService $postService,
+        Storage $fileStorage,
+        FeedService $feedService,
+        array $config = []
+    ) {
         parent::__construct($id, $module, $config);
         $this->postService = $postService;
         $this->fileStorage = $fileStorage;
+        $this->feedService = $feedService;
     }
 
     public function actionCreate()
     {
-        if (Yii::$app->user->isGuest)
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
+        }
 
         $user = Yii::$app->user->identity;
         $storage = $this->fileStorage;
         $post = $this->postService->create();
-        $postForm = new PostForm($user, $storage, $post);
+        $feedService = $this->feedService;
+        $postForm = new PostForm($user, $storage, $post, $feedService);
 
         try {
             if ($postForm->load(Yii::$app->request->post())) {
@@ -66,8 +77,9 @@ class DefaultController extends Controller
 
     public function actionToggleLike()
     {
-        if (Yii::$app->user->isGuest)
+        if (Yii::$app->user->isGuest) {
             return $this->goHome();
+        }
 
         Yii::$app->response->format = Response::FORMAT_JSON;
 

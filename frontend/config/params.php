@@ -12,4 +12,6 @@ return [
     ],
 
     'defaultProfileImage' => '/img/profile_default_image.jpg',
+
+    'postsFeedLimit' => 100,
 ];
