@@ -4,12 +4,14 @@
 /* @var $currentUser frontend\models\User */
 /* @var $feedItems [] frontend\models\Feed */
 /* @var $fileStorage frontend\components\storage\Storage */
+/* @var $likeService frontend\components\LikeService */
 
 $this->title = 'My Yii Application';
 
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
+use yii\web\JqueryAsset;
 
 ?>
 <div class="site-index">
@@ -34,6 +36,21 @@ use yii\helpers\HtmlPurifier;
                 <div class="col-md-12">
                     <?php echo Yii::$app->formatter->asDatetime($feedItem->post_created_at); ?>
                 </div>
+                <div class="col-md-12">
+                    Likes: <span class="likes-count"><?php echo $likeService->getCount($feedItem->post_id); ?></span>
+
+                    <a href="#"
+                       class="btn btn-primary button-unlike <?php echo ($currentUser && $likeService->isLiked($feedItem->post_id)) ? "" : "display-none"; ?>"
+                       data-id="<?php echo $feedItem->post_id; ?>">
+                        Unlike&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-down"></span>
+                    </a>
+                    <a href="#"
+                       class="btn btn-primary button-like <?php echo ($currentUser && $likeService->isLiked($feedItem->post_id)) ? "display-none" : ""; ?>"
+                       data-id="<?php echo $feedItem->post_id; ?>">
+                        Like&nbsp;&nbsp;<span class="glyphicon glyphicon-thumbs-up"></span>
+                    </a>
+
+                </div>
             </div>
             <div class="col-md-12">
                 <hr/>
@@ -48,3 +65,5 @@ use yii\helpers\HtmlPurifier;
 
     <?php endif; ?>
 </div>
+
+<?php $this->registerJsFile('@web/js/likes.js', ["depends" => JqueryAsset::className()]); ?>

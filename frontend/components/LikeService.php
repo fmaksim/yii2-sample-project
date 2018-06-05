@@ -47,14 +47,14 @@ class LikeService extends Component
 
     }
 
-    public function getCount($likebleObject): int
+    public function getCount(int $likebleObjectId): int
     {
-        return $this->storage->scard("{$this->type}:{$likebleObject->getId()}:likes");
+        return $this->storage->scard("{$this->type}:{$likebleObjectId}:likes");
     }
 
-    public function isLiked($likebleObject): bool
+    public function isLiked(int $likebleObjectId): bool
     {
-        return $this->storage->sismember("{$this->type}:{$likebleObject->getId()}:likes", $this->userId) ?
+        return $this->storage->sismember("{$this->type}:{$likebleObjectId}:likes", $this->userId) ?
             true :
             false;
     }

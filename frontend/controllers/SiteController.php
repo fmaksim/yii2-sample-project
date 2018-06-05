@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\components\LikeService;
 use frontend\components\storage\Storage;
 use yii\web\Controller;
 use frontend\models\User;
@@ -13,10 +14,12 @@ class SiteController extends Controller
 {
 
     protected $fileStorage;
+    protected $likeService;
 
-    public function __construct($id, $module, Storage $fileStorage, array $config = [])
+    public function __construct($id, $module, LikeService $likeService, Storage $fileStorage, array $config = [])
     {
         $this->fileStorage = $fileStorage;
+        $this->likeService = $likeService;
         parent::__construct($id, $module, $config);
     }
 
@@ -46,6 +49,7 @@ class SiteController extends Controller
         $currentUser = Yii::$app->user->identity;
         $feedPostsLimit = Yii::$app->params['postsFeedLimit'];
         $fileStorage = $this->fileStorage;
+        $likeService = $this->likeService;
 
         $feedItems = $currentUser->getFeed($feedPostsLimit);
 
@@ -53,7 +57,8 @@ class SiteController extends Controller
             [
                 "feedItems" => $feedItems,
                 "currentUser" => $currentUser,
-                "fileStorage" => $fileStorage
+                "fileStorage" => $fileStorage,
+                "likeService" => $likeService
             ]
         );
     }

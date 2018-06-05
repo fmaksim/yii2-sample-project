@@ -35,14 +35,14 @@ class Post extends \yii\db\ActiveRecord
         return $this->id;
     }
 
-    public function isLiked()
+    public function isLiked(): bool
     {
-        return $this->likeService->isLiked($this);
+        return $this->likeService->isLiked($this->getId());
     }
 
-    public function getCountLikes()
+    public function getCountLikes(): int
     {
-        return $this->likeService->getCount($this);
+        return $this->likeService->getCount($this->getId());
     }
 
     public function getImage()
