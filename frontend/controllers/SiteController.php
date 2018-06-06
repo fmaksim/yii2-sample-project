@@ -50,6 +50,7 @@ class SiteController extends Controller
         $feedPostsLimit = Yii::$app->params['postsFeedLimit'];
         $fileStorage = $this->fileStorage;
         $likeService = $this->likeService;
+        $likeService->setType("post");
 
         $feedItems = $currentUser->getFeed($feedPostsLimit);
 

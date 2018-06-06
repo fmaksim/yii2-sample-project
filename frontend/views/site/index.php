@@ -21,7 +21,8 @@ use yii\web\JqueryAsset;
             <div class="col-md-12">
 
                 <div class="col-md-12">
-                    <img src="<?php echo $feedItem->author_picture; ?>" width="30" height="30">
+                    <img src="<?php echo $feedItem->author_picture ?? Yii::$app->params["defaultProfileImage"]; ?>"
+                         width="30" height="30">
                     <a href="<?php echo Url::to([
                         '/user/profile/view',
                         'nickname' => ($feedItem->author_nickname) ? $feedItem->author_nickname : $feedItem->author_id

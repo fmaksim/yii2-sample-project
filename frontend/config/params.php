@@ -11,7 +11,7 @@ return [
         "maxHeight" => 600
     ],
 
-    'defaultProfileImage' => '/img/profile_default_image.jpg',
+    'defaultProfileImage' => '/img/profile_default_image.png',
 
     'postsFeedLimit' => 100,
 ];

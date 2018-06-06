@@ -39,7 +39,7 @@ class LikeService extends Component
             return false;
         }
 
-        if ($this->isLiked($likebleObject)) {
+        if ($this->isLiked($likebleObject->getId())) {
             return $this->unlike($likebleObject);
         }
 
