@@ -100,14 +100,18 @@ use yii\helpers\HtmlPurifier;
                                 <div class="col-md-12">
                                     <h3>Comments:</h3>
                                     <?php foreach ($post->comments as $comment): ?>
-                                        <div class="row">
-                                            <div class="well well-lg">
+
+                                        <div class="well">
                                                 <?php echo $comment->getDate() . " " . $comment->username; ?>
                                                 <?php if (Yii::$app->user->identity && $comment->user_id === Yii::$app->user->identity->getId()): ?>
-                                                    <?php echo Html::a('Edit', ["/comment/edit/" . $comment->id]) ?>
+                                                    <?php echo Html::a('Edit', ["/comment/edit/" . $comment->id],
+                                                        ["class" => "pull-right"]) ?>
                                                     <?php $deleteCommentForm = ActiveForm::begin([
                                                         "action" => "/comment/delete/" . $comment->id,
-                                                        "id" => "form" . $comment->id
+                                                        "id" => "form" . $comment->id,
+                                                        'options' => [
+                                                            'class' => 'pull-right'
+                                                        ],
                                                     ]); ?>
                                                     <?php echo Html::a("Remove", ["/comment/delete/" . $comment->id],
                                                         [
@@ -117,8 +121,7 @@ use yii\helpers\HtmlPurifier;
                                                     <?php ActiveForm::end(); ?>
                                                 <?php endif; ?>
                                             </div>
-                                            <div><?php echo Html::encode($comment->text); ?></div>
-                                        </div>
+                                        <div class="blockquote"><?php echo Html::encode($comment->text); ?></div>
                                         <hr>
                                     <?php endforeach; ?>
                                 </div>

@@ -2,6 +2,7 @@
 
 namespace frontend\components;
 
+use frontend\components\storage\RedisStorage;
 use frontend\models\Comment;
 use frontend\models\User;
 use frontend\modules\comment\models\forms\CommentForm;
@@ -9,6 +10,13 @@ use yii\web\NotFoundHttpException;
 
 class CommentService
 {
+
+    protected $redisStorage;
+
+    public function __construct(RedisStorage $redisStorage)
+    {
+        $this->redisStorage = $redisStorage->getStorage();
+    }
 
     public function add(int $postId, User $user, $text): bool
     {
@@ -24,6 +32,7 @@ class CommentService
             $comment->text = $text;
 
             if ($comment->save(false)) {
+                $this->redisStorage->incr("post:{$postId}:comments");
                 return true;
             }
         }
@@ -55,7 +64,9 @@ class CommentService
     {
         $comment = $this->findById($id);
         if ($comment) {
+            $postId = $comment->post_id;
             if ($comment->delete()) {
+                $this->redisStorage->decr("post:{$postId}:comments");
                 return true;
             } else {
                 return false;

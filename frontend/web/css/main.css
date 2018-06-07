@@ -419,6 +419,10 @@ footer .footer p.text {
     color: #c16fb6;
 }
 
+.remove-comment {
+    margin-right: 10px;
+}
+
 /** profile **/
 .profile {
     margin-bottom: 35px;

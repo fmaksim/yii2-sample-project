@@ -5,6 +5,7 @@
 /* @var $feedItems [] frontend\models\Feed */
 /* @var $fileStorage frontend\components\storage\Storage */
 /* @var $likeService frontend\components\LikeService */
+/* @var $postService frontend\components\PostService */
 
 $this->title = 'My Yii Application';
 
@@ -31,8 +32,8 @@ use yii\web\JqueryAsset;
                                                  class="author-image"/>
                                             <div class="author-name"><a href="<?php echo Url::to([
                                                     '/user/profile/view',
-                                                    'nickname' => ($feedItem->author_nickname) ? $feedItem->author_nickname : $feedItem->author_id
-                                                ]) ?>">Firstname Lastname</a></div>
+                                                    'nickname' => ($feedItem->author_nickname) ?? $feedItem->author_id
+                                                ]) ?>"><?php echo $feedItem->author_name; ?></a></div>
                                         </div>
                                     </div>
                                     <div class="post-type-image">
@@ -70,7 +71,8 @@ use yii\web\JqueryAsset;
                                             <a href="<?php echo Url::to([
                                                 "/post/default/view",
                                                 "id" => $feedItem->post_id
-                                            ]) ?>#comments">6 Comments</a>
+                                            ]) ?>#comments"><?php echo $postService->getCommentsCount($feedItem->post_id); ?>
+                                                Comments</a>
 
                                         </div>
                                         <div class="post-date">
