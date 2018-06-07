@@ -2,18 +2,24 @@
 
 namespace frontend\modules\user\models\forms;
 
+use frontend\components\storage\Storage;
+use frontend\events\UploadedPhotoEvent;
 use Yii;
 use yii\base\Model;
-use Intervention\Image\ImageManager;
 
 class PictureForm extends Model
 {
 
-    public $picture;
+    const EVENT_UPLOADED_PHOTO = 'photo_uploaded';
 
-    public function __construct()
+    public $picture;
+    public $user;
+    protected $fileStorage;
+
+    public function __construct(Storage $fileStorage)
     {
-        $this->on(self::EVENT_AFTER_VALIDATE, [$this, "resize"]);
+        $this->on(self::EVENT_UPLOADED_PHOTO, [$fileStorage, 'resize']);
+        $this->fileStorage = $fileStorage;
     }
 
     public function rules()
@@ -27,23 +33,25 @@ class PictureForm extends Model
         ];
     }
 
-    public function resize()
+    public function save(): bool
     {
+        if ($this->validate()) {
 
-        $width = Yii::$app->params['imgSize']['maxWidth'];
-        $height = Yii::$app->params['imgSize']['maxHeight'];
+            $uploadedPhotoEvent = new UploadedPhotoEvent();
+            $uploadedPhotoEvent->tempFile = $this->picture->tempName;
+            $this->trigger(self::EVENT_UPLOADED_PHOTO, $uploadedPhotoEvent);
 
-        $manager = new ImageManager(array('driver' => 'imagick'));
-        $image = $manager->make($this->picture->tempName);
+            $this->user->picture = $this->fileStorage->saveUploadedFile($this->picture);
 
-        $image->resize($width, $height, function ($constraint) {
+            if ($this->user->save(false, ["picture"])) {
+                return true;
+            }
 
-            $constraint->aspectRatio();
+            return false;
 
-            $constraint->upsize();
+        }
 
-        })->save();
-
+        return false;
     }
 
     private function getMaxFileSize()

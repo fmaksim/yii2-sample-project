@@ -2,6 +2,7 @@
 
 namespace frontend\modules\user\controllers;
 
+use frontend\components\storage\Storage;
 use frontend\components\SubscriptionService;
 use Yii;
 use yii\web\Controller;
@@ -18,11 +19,18 @@ class ProfileController extends Controller
 {
 
     protected $subscriptionService;
+    protected $fileStorage;
 
-    public function __construct($id, $module, SubscriptionService $subscriptionService, array $config = [])
-    {
+    public function __construct(
+        $id,
+        $module,
+        Storage $fileStorage,
+        SubscriptionService $subscriptionService,
+        array $config = []
+    ) {
         parent::__construct($id, $module, $config);
         $this->subscriptionService = $subscriptionService;
+        $this->fileStorage = $fileStorage;
     }
 
     /**
@@ -31,7 +39,7 @@ class ProfileController extends Controller
      */
     public function actionView($nickname)
     {
-        $pictureModel = new PictureForm();
+        $pictureModel = new PictureForm($this->fileStorage);
 
         return $this->render('index', [
             "user" => $this->findUser($nickname),
@@ -51,25 +59,29 @@ class ProfileController extends Controller
 
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $pictureModel = new PictureForm();
+        $pictureModel = new PictureForm($this->fileStorage);
+        $user = Yii::$app->user->identity;
 
-        $pictureModel->picture = UploadedFile::getInstance($pictureModel, "picture");
-        if ($pictureModel->validate()) {
+        try {
+            $pictureModel->user = $user;
+            $pictureModel->picture = UploadedFile::getInstance($pictureModel, "picture");
 
-            $user = Yii::$app->user->identity;
-            $user->picture = Yii::$app->fileStorage->saveUploadedFile($pictureModel->picture);
-
-            if ($user->save(false, ["picture"])) {
+            if ($pictureModel->save()) {
                 return [
                     "success" => true,
-                    "pictureUri" => Yii::$app->fileStorage->getFile($user->picture),
+                    "pictureUri" => $this->fileStorage->getFile($user->picture),
                 ];
             }
 
-        } else {
             return [
                 "success" => false,
                 "errors" => $pictureModel->getErrors(),
+            ];
+
+        } catch (\Exception $e) {
+            return [
+                "success" => false,
+                "errors" => $e->getMessage(),
             ];
         }
 
