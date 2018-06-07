@@ -37,7 +37,7 @@ use yii\web\JqueryAsset;
                                     </div>
                                     <div class="post-type-image">
                                         <a href="<?php echo Url::to([
-                                            "post/default/view",
+                                            "/post/default/view",
                                             "id" => $feedItem->post_id
                                         ]) ?>">
                                             <img src="<?php echo $fileStorage->getFile($feedItem->post_filename); ?>"
@@ -68,7 +68,7 @@ use yii\web\JqueryAsset;
                                         </div>
                                         <div class="post-comments">
                                             <a href="<?php echo Url::to([
-                                                "post/default/view",
+                                                "/post/default/view",
                                                 "id" => $feedItem->post_id
                                             ]) ?>#comments">6 Comments</a>
 
@@ -78,7 +78,7 @@ use yii\web\JqueryAsset;
                                         </div>
                                         <div class="post-report">
                                             <a href="<?php echo Url::to([
-                                                "post/default/view",
+                                                "/post/default/view",
                                                 "id" => $feedItem->post_id
                                             ]) ?>#comments">Report post</a>
                                         </div>

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use dosamigos\fileupload\FileUpload;
+use yii\helpers\Url;
 
 ?>
 
@@ -88,7 +89,7 @@ use dosamigos\fileupload\FileUpload;
 
                         <div class="profile-bottom">
                             <div class="profile-post-count">
-                                <span>16 posts</span>
+                                <span><?php echo count($user->posts); ?> posts</span>
                             </div>
                             <div class="profile-followers">
                                 <a data-target="#followers"
@@ -100,14 +101,26 @@ use dosamigos\fileupload\FileUpload;
                             </div>
                         </div>
                     </article>
-
+                    <?php if (count($user->posts) > 0): ?>
                     <div class="col-sm-12 col-xs-12">
                         <div class="row profile-posts">
-                            <div class="col-md-4 profile-post">
-                                <a href="#"><img src="img/demo/car.jpg" class="author-image"/></a>
-                            </div>
+                            <?php foreach ($user->posts as $post): ?>
+                                <div class="col-md-4 profile-post">
+                                    <a href="<?php echo Url::to([
+                                        "/post/default/view",
+                                        "id" => $post->id
+                                    ]) ?>"><img src="<?php echo $post->getImage(); ?>" class="author-image"/></a>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
+                    <?php else: ?>
+                        <div class="col-sm-12 col-xs-12">
+                            <div class="row profile-posts">
+                                <?php echo Html::encode($user->username); ?> has not added any posts yet.
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
