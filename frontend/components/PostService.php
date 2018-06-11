@@ -7,6 +7,13 @@ use frontend\components\storage\Storage;
 use frontend\models\Post;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Class PostService - business logic for managing posts
+ * @package frontend\components
+ * @property \frontend\components\LikeService $likeService
+ * @property \frontend\components\storage\Storage $fileStorage
+ * @property \frontend\components\storage\RedisStorage $redisStorage
+ */
 class PostService
 {
 

@@ -45,7 +45,7 @@ class Post extends \yii\db\ActiveRecord
         return $this->likeService->getCount($this->getId());
     }
 
-    public function getImage()
+    public function getImage(): string
     {
         return $this->fileStorage->getFile($this->filename);
     }
@@ -83,12 +83,12 @@ class Post extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getUser()
+    public function getUser(): User
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public function getComments()
+    public function getComments(): array
     {
         return $this->hasMany(Comment::className(), ['post_id' => 'id'])
             ->orderBy(['created_at' => SORT_DESC]);

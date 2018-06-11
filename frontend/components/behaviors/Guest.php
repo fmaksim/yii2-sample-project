@@ -6,6 +6,10 @@ use yii\base\Behavior;
 use yii\web\Controller;
 use Yii;
 
+/**
+ * Class Guest - Yii2 Behavior for restrict guest users
+ * @package frontend\components\behaviors
+ */
 class Guest extends Behavior
 {
 

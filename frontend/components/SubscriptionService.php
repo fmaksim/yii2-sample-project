@@ -7,6 +7,12 @@ use frontend\models\User;
 use yii\base\Component;
 use Yii;
 
+/**
+ * Class SubscriptionService - component implements the subscription mechanism for users
+ * @package frontend\components
+ * @property \frontend\components\storage\RedisStorage $storage
+ * @property \frontend\models\User $currentUser
+ */
 class SubscriptionService extends Component
 {
 

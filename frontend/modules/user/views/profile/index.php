@@ -21,7 +21,7 @@ use yii\helpers\Url;
                             <img src="<?php echo $user->getPicture() ?? Yii::$app->params["defaultProfileImage"]; ?>"
                                  class="author-image"/>
                             <div class="author-name"><?php echo Html::encode($user->username); ?></div>
-                            <?php if ($currentUser && $currentUser->isIAm($user)): ?>
+                            <?php if ($currentUser && $currentUser->isEqual($user)): ?>
                                 <?= FileUpload::widget([
                                     'model' => $pictureModel,
                                     'attribute' => 'picture',

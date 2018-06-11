@@ -8,12 +8,16 @@ use yii\base\Component;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 
-
+/**
+ * Class Storage - component provide basic methods for manipulate files (resize, store, delete)
+ * @package frontend\components\storage
+ * @property string $fileName
+ */
 class Storage extends Component implements StorageInterface
 {
     private $fileName;
 
-    public function saveUploadedFile(UploadedFile $file)
+    public function saveUploadedFile(UploadedFile $file): string
     {
 
         $path = $this->preparePath($file);
@@ -23,12 +27,12 @@ class Storage extends Component implements StorageInterface
 
     }
 
-    public function getFile(string $fileName)
+    public function getFile(string $fileName): string
     {
         return Yii::$app->params['storageUrl'] . $fileName;
     }
 
-    public function deleteFile(string $fileName)
+    public function deleteFile(string $fileName): bool
     {
         $file = $this->getStoragePath() . $fileName;
 
@@ -39,7 +43,7 @@ class Storage extends Component implements StorageInterface
         return false;
     }
 
-    public function resize($file)
+    public function resize(UploadedFile $file): void
     {
 
         $maxWidth = Yii::$app->params['imgSize']['maxWidth'];
@@ -58,7 +62,7 @@ class Storage extends Component implements StorageInterface
     /**
      * @param UploadedFile $file
      */
-    protected function preparePath(UploadedFile $file)
+    protected function preparePath(UploadedFile $file): string
     {
 
         $this->fileName = $this->getFileName($file);
@@ -74,12 +78,12 @@ class Storage extends Component implements StorageInterface
     /**
      * @return string
      */
-    protected function getStoragePath()
+    protected function getStoragePath(): string
     {
         return Yii::getAlias(Yii::$app->params['storagePath']);
     }
 
-    private function getFileName(UploadedFile $file)
+    private function getFileName(UploadedFile $file): string
     {
 
         $hash = sha1_file($file->tempName);

@@ -8,6 +8,11 @@ use yii\base\Component;
 use Yii;
 use yii\base\Event;
 
+/**
+ * Class FeedService - components provide storing method for handling the post_created event
+ * @package frontend\components
+ * @property \frontend\components\storage\RedisStorage $storage
+ */
 class FeedService extends Component
 {
 

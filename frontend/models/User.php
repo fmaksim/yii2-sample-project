@@ -276,12 +276,12 @@ class User extends ActiveRecord implements IdentityInterface
         return (count($mutualSubscriptions) > 0 and !Yii::$app->user->isGuest) ? true : false;
     }
 
-    public function isIAm(User $user): bool
+    public function isEqual(User $user): bool
     {
         return ($this->getId() === $user->getId()) ? true : false;
     }
 
-    public function getPosts()
+    public function getPosts(): array
     {
         $order = ["created_at" => SORT_DESC];
         return $this->hasMany(Post::className(), ["user_id" => "id"])->orderBy($order);

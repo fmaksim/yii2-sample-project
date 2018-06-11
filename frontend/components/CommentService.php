@@ -8,6 +8,11 @@ use frontend\models\User;
 use frontend\modules\comment\models\forms\CommentForm;
 use yii\web\NotFoundHttpException;
 
+/**
+ * Class CommentService - business logic for manage comments
+ * @package frontend\components
+ * @property \frontend\components\storage\RedisStorage $redisStorage
+ */
 class CommentService
 {
 

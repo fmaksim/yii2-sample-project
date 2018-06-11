@@ -7,6 +7,13 @@ use yii\base\Component;
 use yii\base\InvalidCallException;
 use Yii;
 
+/**
+ * Class LikeService -the component provides a unified "like-dislike" mechanism for different types of objects
+ * @package frontend\components
+ * @property \frontend\components\storage\RedisStorage $storage
+ * @property string $type post|comment
+ * @property int $userId
+ */
 class LikeService extends Component
 {
 
@@ -23,7 +30,7 @@ class LikeService extends Component
         parent::__construct($config);
     }
 
-    public function setType($type): bool
+    public function setType(string $type): bool
     {
         if (in_array($type, self::AVAILABLE_TYPES)) {
             $this->type = $type;
