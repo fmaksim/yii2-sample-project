@@ -2,12 +2,12 @@
 
 namespace frontend\modules\user\controllers;
 
+use frontend\components\ProfileService;
 use frontend\components\storage\Storage;
 use frontend\components\SubscriptionService;
 use Yii;
 use yii\web\Controller;
 use frontend\models\User;
-use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\UploadedFile;
 use frontend\modules\user\models\forms\PictureForm;
@@ -19,6 +19,7 @@ class ProfileController extends Controller
 {
 
     protected $subscriptionService;
+    protected $profileService;
     protected $fileStorage;
 
     public function __construct(
@@ -26,10 +27,12 @@ class ProfileController extends Controller
         $module,
         Storage $fileStorage,
         SubscriptionService $subscriptionService,
+        ProfileService $profileService,
         array $config = []
     ) {
         parent::__construct($id, $module, $config);
         $this->subscriptionService = $subscriptionService;
+        $this->profileService = $profileService;
         $this->fileStorage = $fileStorage;
     }
 
@@ -42,16 +45,11 @@ class ProfileController extends Controller
         $pictureModel = new PictureForm($this->fileStorage);
 
         return $this->render('index', [
-            "user" => $this->findUser($nickname),
+            "user" => $this->profileService->findByNickname($nickname),
             "currentUser" => Yii::$app->user->identity,
             "pictureModel" => $pictureModel,
             "subscriptionService" => $this->subscriptionService,
         ]);
-    }
-
-    protected function findUser($nickname)
-    {
-        return User::find()->where(["id" => $nickname])->orWhere(["nickname" => $nickname])->one();
     }
 
     public function actionUploadPhoto()
@@ -95,12 +93,16 @@ class ProfileController extends Controller
 
         $currentUser = Yii::$app->user->identity;
 
-        if (Yii::$app->fileStorage->deleteFile($currentUser->picture)) {
-            Yii::$app->session->setFlash("success", "File has been removed successfully!");
-            $currentUser->picture = null;
-            $currentUser->save(false, ["picture"]);
-        } else {
-            Yii::$app->session->setFlash("error", "Permission denied!");
+        try {
+            if ($this->fileStorage->deleteFile($currentUser->picture)) {
+                Yii::$app->session->setFlash("success", "File has been removed successfully!");
+                $currentUser->picture = null;
+                $currentUser->save(false, ["picture"]);
+            } else {
+                Yii::$app->session->setFlash("error", "Permission denied!");
+            }
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash("error", $e->getMessage());
         }
 
         return $this->redirect(["/user/profile/view", "nickname" => $currentUser->getNickname()]);
@@ -112,9 +114,9 @@ class ProfileController extends Controller
             return $this->redirect(["/user/default/login"]);
 
         try {
-            $followedUser = $this->findUserById($id);
+            $followedUser = $this->profileService->findById($id);
 
-            if (Yii::$app->user->identity->isIAm($followedUser) || !$this->subscriptionService->toggleSubscribe($followedUser)) {
+            if (Yii::$app->user->identity->isEqual($followedUser) || !$this->subscriptionService->toggleSubscribe($followedUser)) {
                 Yii::$app->session->setFlash("error", "Subscription error, please try later!");
             }
 
@@ -124,14 +126,5 @@ class ProfileController extends Controller
         }
 
     }
-
-    protected function findUserById($id)
-    {
-        if ($user = User::findOne($id)) {
-            return $user;
-        }
-        throw new NotFoundHttpException();
-    }
-
 
 }
