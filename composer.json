@@ -25,7 +25,8 @@
       "intervention/image": "^2.4",
       "bower-asset/jquery": "1.12.4",
       "bower-asset/bootstrap": "3.3.5",
-      "bower-asset/font-awesome": "4.4.0"
+      "bower-asset/font-awesome": "4.4.0",
+      "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
