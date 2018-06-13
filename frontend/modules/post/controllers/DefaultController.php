@@ -2,6 +2,7 @@
 
 namespace frontend\modules\post\controllers;
 
+use frontend\components\ComplaintService;
 use frontend\components\FeedService;
 use frontend\components\storage\Storage;
 use Yii;
@@ -20,6 +21,7 @@ class DefaultController extends Controller
     protected $postService;
     protected $fileStorage;
     protected $feedService;
+    protected $complaintService;
 
     public function __construct(
         $id,
@@ -27,12 +29,14 @@ class DefaultController extends Controller
         PostService $postService,
         Storage $fileStorage,
         FeedService $feedService,
+        ComplaintService $complaintService,
         array $config = []
     ) {
         parent::__construct($id, $module, $config);
         $this->postService = $postService;
         $this->fileStorage = $fileStorage;
         $this->feedService = $feedService;
+        $this->complaintService = $complaintService;
     }
 
     public function actionCreate()
@@ -71,6 +75,7 @@ class DefaultController extends Controller
         return $this->render('view', [
                 "post" => $post,
                 "currentUser" => Yii::$app->user->identity,
+                "complaintService" => $this->complaintService,
             ]
         );
     }

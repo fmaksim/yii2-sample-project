@@ -27,9 +27,8 @@ class ComplaintService extends Component
 
     public function complain(Post $post, int $userId): bool
     {
-        $key = $this->getStoreKey($post->getId());
 
-        if (!$this->isComplain($key, $userId)) {
+        if (!$this->isComplain($post->getId(), $userId)) {
             return $this->add($post, $userId);
         }
 
@@ -37,14 +36,15 @@ class ComplaintService extends Component
 
     }
 
+    public function isComplain(int $postId, int $userId): bool
+    {
+        $key = $this->getStoreKey($postId);
+        return $this->redisStorage->sismember($key, $userId);
+    }
+
     private function getStoreKey(int $postId)
     {
         return "post:{$postId}:complaints";
-    }
-
-    private function isComplain($key, int $userId): bool
-    {
-        return $this->redisStorage->sismember($key, $userId);
     }
 
     private function add(Post $post, int $userId): bool

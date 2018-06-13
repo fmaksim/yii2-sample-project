@@ -6,6 +6,7 @@
 /* @var $fileStorage frontend\components\storage\Storage */
 /* @var $likeService frontend\components\LikeService */
 /* @var $postService frontend\components\PostService */
+/* @var $complaintService frontend\components\ComplaintService */
 
 $this->title = 'My Yii Application';
 
@@ -79,10 +80,15 @@ use yii\web\JqueryAsset;
                                             <span><?php echo Yii::$app->formatter->asDatetime($feedItem->post_created_at); ?></span>
                                         </div>
                                         <div class="post-report">
-                                            <a href="javascript:;" class="btn btn-default button-complain"
-                                               data-id="<?php echo $feedItem->post_id; ?>">
-                                                Report post <i class="fa fa-cog fa-spin fa-fw icon-placeholder"
-                                                               style="display: none;"></i></a>
+                                            <?php if ($complaintService->isComplain($feedItem->post_id,
+                                                $currentUser->getId())): ?>
+                                                <span>You already complained!</span>
+                                            <?php else: ?>
+                                                <a href="javascript:;" class="btn btn-default button-complain"
+                                                   data-id="<?php echo $feedItem->post_id; ?>">
+                                                    Report post <i class="fa fa-cog fa-spin fa-fw icon-placeholder"
+                                                                   style="display: none;"></i></a>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </article>

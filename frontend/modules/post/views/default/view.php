@@ -1,9 +1,11 @@
 <?php
-/**
- * @var $this yii\base\View
- * @var $currentUser frontend\models\User
- * @var $post frontend\models\Post
- */
+
+/* @var $this yii\base\View */
+/* @var $currentUser frontend\models\User */
+/* @var $post frontend\models\Post */
+
+/* @var $complaintService frontend\components\ComplaintService */
+
 
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
@@ -71,10 +73,14 @@ use yii\helpers\HtmlPurifier;
                                     <span><?php echo Yii::$app->formatter->asDatetime($post->created_at); ?></span>
                                 </div>
                                 <div class="post-report">
-                                    <a href="javascript:;" class="btn btn-default button-complain"
-                                       data-id="<?php echo $post->getId(); ?>">
-                                        Report post <i class="fa fa-cog fa-spin fa-fw icon-placeholder"
-                                                       style="display: none;"></i></a>
+                                    <?php if ($complaintService->isComplain($post->getId(), $currentUser->getId())): ?>
+                                        <span>You already complained!</span>
+                                    <?php else: ?>
+                                        <a href="javascript:;" class="btn btn-default button-complain"
+                                           data-id="<?php echo $post->getId(); ?>">
+                                            Report post <i class="fa fa-cog fa-spin fa-fw icon-placeholder"
+                                                           style="display: none;"></i></a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </article>
@@ -104,25 +110,25 @@ use yii\helpers\HtmlPurifier;
                                     <?php foreach ($post->comments as $comment): ?>
 
                                         <div class="well">
-                                                <?php echo $comment->getDate() . " " . $comment->username; ?>
-                                                <?php if (Yii::$app->user->identity && $comment->user_id === Yii::$app->user->identity->getId()): ?>
-                                                    <?php echo Html::a('Edit', ["/comment/edit/" . $comment->id],
-                                                        ["class" => "pull-right"]) ?>
-                                                    <?php $deleteCommentForm = ActiveForm::begin([
-                                                        "action" => "/comment/delete/" . $comment->id,
-                                                        "id" => "form" . $comment->id,
-                                                        'options' => [
-                                                            'class' => 'pull-right'
-                                                        ],
-                                                    ]); ?>
-                                                    <?php echo Html::a("Remove", ["/comment/delete/" . $comment->id],
-                                                        [
-                                                            "class" => "remove-comment",
-                                                            "data-form" => "form" . $comment->id
-                                                        ]) ?>
-                                                    <?php ActiveForm::end(); ?>
-                                                <?php endif; ?>
-                                            </div>
+                                            <?php echo $comment->getDate() . " " . $comment->username; ?>
+                                            <?php if (Yii::$app->user->identity && $comment->user_id === Yii::$app->user->identity->getId()): ?>
+                                                <?php echo Html::a('Edit', ["/comment/edit/" . $comment->id],
+                                                    ["class" => "pull-right"]) ?>
+                                                <?php $deleteCommentForm = ActiveForm::begin([
+                                                    "action" => "/comment/delete/" . $comment->id,
+                                                    "id" => "form" . $comment->id,
+                                                    'options' => [
+                                                        'class' => 'pull-right'
+                                                    ],
+                                                ]); ?>
+                                                <?php echo Html::a("Remove", ["/comment/delete/" . $comment->id],
+                                                    [
+                                                        "class" => "remove-comment",
+                                                        "data-form" => "form" . $comment->id
+                                                    ]) ?>
+                                                <?php ActiveForm::end(); ?>
+                                            <?php endif; ?>
+                                        </div>
                                         <div class="blockquote"><?php echo Html::encode($comment->text); ?></div>
                                         <hr>
                                     <?php endforeach; ?>

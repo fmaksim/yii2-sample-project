@@ -1,11 +1,11 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\components\ComplaintService;
 use frontend\components\LikeService;
 use frontend\components\PostService;
 use frontend\components\storage\Storage;
 use yii\web\Controller;
-use frontend\models\User;
 use Yii;
 
 /**
@@ -17,6 +17,7 @@ class SiteController extends Controller
     protected $fileStorage;
     protected $likeService;
     protected $postService;
+    protected $complaintService;
 
     public function __construct(
         $id,
@@ -24,12 +25,13 @@ class SiteController extends Controller
         PostService $postService,
         LikeService $likeService,
         Storage $fileStorage,
+        ComplaintService $complaintService,
         array $config = []
-    )
-    {
+    ) {
         $this->fileStorage = $fileStorage;
         $this->likeService = $likeService;
         $this->postService = $postService;
+        $this->complaintService = $complaintService;
         parent::__construct($id, $module, $config);
     }
 
@@ -60,6 +62,7 @@ class SiteController extends Controller
         $feedPostsLimit = Yii::$app->params['postsFeedLimit'];
         $fileStorage = $this->fileStorage;
         $postService = $this->postService;
+        $complaintService = $this->complaintService;
         $likeService = $this->likeService;
         $likeService->setType("post");
 
@@ -71,7 +74,8 @@ class SiteController extends Controller
                 "currentUser" => $currentUser,
                 "fileStorage" => $fileStorage,
                 "likeService" => $likeService,
-                "postService" => $postService
+                "postService" => $postService,
+                "complaintService" => $complaintService
             ]
         );
     }
