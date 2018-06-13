@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
  * @property string $description
  * @property string $filename
  * @property int $user_id
+ * @property int $complaints
  * @property int $created_at
  */
 class Post extends \yii\db\ActiveRecord
@@ -50,6 +51,11 @@ class Post extends \yii\db\ActiveRecord
         return $this->fileStorage->getFile($this->filename);
     }
 
+    public function incComplaints()
+    {
+        $this->complaints++;
+    }
+
     public static function instantiate($row)
     {
         return \Yii::$container->get(static::class);
@@ -83,12 +89,12 @@ class Post extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getUser(): User
+    public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    public function getComments(): array
+    public function getComments()
     {
         return $this->hasMany(Comment::className(), ['post_id' => 'id'])
             ->orderBy(['created_at' => SORT_DESC]);

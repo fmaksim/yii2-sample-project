@@ -281,7 +281,7 @@ class User extends ActiveRecord implements IdentityInterface
         return ($this->getId() === $user->getId()) ? true : false;
     }
 
-    public function getPosts(): array
+    public function getPosts()
     {
         $order = ["created_at" => SORT_DESC];
         return $this->hasMany(Post::className(), ["user_id" => "id"])->orderBy($order);

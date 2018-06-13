@@ -71,8 +71,10 @@ use yii\helpers\HtmlPurifier;
                                     <span><?php echo Yii::$app->formatter->asDatetime($post->created_at); ?></span>
                                 </div>
                                 <div class="post-report">
-                                    <a href="<?php echo Url::to(["/post/default/view", "id" => $post->id]) ?>#comments">Report
-                                        post</a>
+                                    <a href="javascript:;" class="btn btn-default button-complain"
+                                       data-id="<?php echo $post->getId(); ?>">
+                                        Report post <i class="fa fa-cog fa-spin fa-fw icon-placeholder"
+                                                       style="display: none;"></i></a>
                                 </div>
                             </div>
                         </article>
@@ -135,3 +137,4 @@ use yii\helpers\HtmlPurifier;
 
 <?php $this->registerJsFile('@web/js/likes.js', ["depends" => JqueryAsset::className()]); ?>
 <?php $this->registerJsFile('@web/js/remove-comment.js', ["depends" => JqueryAsset::className()]); ?>
+<?php $this->registerJsFile('@web/js/complain.js', ["depends" => JqueryAsset::className()]); ?>

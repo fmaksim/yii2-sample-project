@@ -79,10 +79,10 @@ use yii\web\JqueryAsset;
                                             <span><?php echo Yii::$app->formatter->asDatetime($feedItem->post_created_at); ?></span>
                                         </div>
                                         <div class="post-report">
-                                            <a href="<?php echo Url::to([
-                                                "/post/default/view",
-                                                "id" => $feedItem->post_id
-                                            ]) ?>#comments">Report post</a>
+                                            <a href="javascript:;" class="btn btn-default button-complain"
+                                               data-id="<?php echo $feedItem->post_id; ?>">
+                                                Report post <i class="fa fa-cog fa-spin fa-fw icon-placeholder"
+                                                               style="display: none;"></i></a>
                                         </div>
                                     </div>
                                 </article>
@@ -102,3 +102,4 @@ use yii\web\JqueryAsset;
     </div>
 
 <?php $this->registerJsFile('@web/js/likes.js', ["depends" => JqueryAsset::className()]); ?>
+<?php $this->registerJsFile('@web/js/complain.js', ["depends" => JqueryAsset::className()]); ?>

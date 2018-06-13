@@ -100,4 +100,36 @@ class DefaultController extends Controller
         }
     }
 
+    public function actionComplain()
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        try {
+            $id = Yii::$app->request->post('id');
+            $currentUser = Yii::$app->user->identity;
+
+            if ($this->postService->complain($currentUser, $id)) {
+                return [
+                    "success" => true,
+                    "text" => "Your complain has been saved!"
+                ];
+            }
+
+            return [
+                "success" => false,
+                "text" => "You already complained!"
+            ];
+
+        } catch (\Exception $e) {
+            return [
+                "success" => false,
+                "text" => $e->getMessage()
+            ];
+        }
+    }
+
 }
