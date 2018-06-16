@@ -4,7 +4,7 @@ namespace frontend\controllers;
 use frontend\components\ComplaintService;
 use frontend\components\LikeService;
 use frontend\components\PostService;
-use frontend\components\storage\Storage;
+use common\components\storage\Storage;
 use yii\web\Controller;
 use Yii;
 

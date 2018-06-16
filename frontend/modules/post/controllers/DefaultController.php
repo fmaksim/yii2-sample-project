@@ -4,7 +4,7 @@ namespace frontend\modules\post\controllers;
 
 use frontend\components\ComplaintService;
 use frontend\components\FeedService;
-use frontend\components\storage\Storage;
+use common\components\storage\Storage;
 use Yii;
 use yii\web\Controller;
 use frontend\modules\post\models\forms\PostForm;

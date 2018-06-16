@@ -2,17 +2,14 @@
 
 namespace frontend\components;
 
-use frontend\components\storage\RedisStorage;
-use frontend\models\Feed;
+use common\components\storage\RedisStorage;
 use frontend\models\Post;
 use yii\base\Component;
-use Yii;
-use yii\base\Event;
 
 /**
  * Class ComplaintService - components provide reporting a complain for the post
  * @package frontend\components
- * @property \frontend\components\RedisStorage $redisStorage
+ * @property \common\components\storage\RedisStorage $redisStorage
  */
 class ComplaintService extends Component
 {
@@ -40,6 +37,18 @@ class ComplaintService extends Component
     {
         $key = $this->getStoreKey($postId);
         return $this->redisStorage->sismember($key, $userId);
+    }
+
+    public function approveComplaint(\backend\models\Post $post): bool
+    {
+        $post->setComplaints(0);
+        if ($post->save(false, ["complaints"])) {
+            $key = "post:{$post->id}:complaints";
+            $this->redisStorage->del($key);
+            return true;
+        }
+
+        return false;
     }
 
     private function getStoreKey(int $postId)

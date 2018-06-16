@@ -38,8 +38,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         parent::__construct($config);
         $this->subscriptionService = Yii::createObject(['class' => 'frontend\components\SubscriptionService']);
-        $this->fileStorage = Yii::createObject(['class' => 'frontend\components\storage\Storage']);
-        $this->redisStorage = Yii::createObject(['class' => 'frontend\components\storage\RedisStorage'])->getStorage();
+        $this->fileStorage = Yii::createObject(['class' => 'common\components\storage\Storage']);
+        $this->redisStorage = Yii::createObject(['class' => 'common\components\storage\RedisStorage'])->getStorage();
     }
 
     public static function tableName()

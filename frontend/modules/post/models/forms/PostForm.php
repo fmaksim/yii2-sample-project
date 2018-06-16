@@ -8,7 +8,7 @@ use frontend\events\UploadedPhotoEvent;
 use Yii;
 use yii\base\Model;
 use frontend\models\User;
-use frontend\components\storage\StorageInterface;
+use common\components\storage\StorageInterface;
 use frontend\models\Post;
 
 class PostForm extends Model

@@ -2,7 +2,7 @@
 
 namespace frontend\modules\user\models\forms;
 
-use frontend\components\storage\Storage;
+use common\components\storage\Storage;
 use frontend\events\UploadedPhotoEvent;
 use Yii;
 use yii\base\Model;

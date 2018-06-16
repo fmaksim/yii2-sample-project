@@ -3,7 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $currentUser frontend\models\User */
 /* @var $feedItems [] frontend\models\Feed */
-/* @var $fileStorage frontend\components\storage\Storage */
+/* @var $fileStorage common\components\storage\Storage */
 /* @var $likeService frontend\components\LikeService */
 /* @var $postService frontend\components\PostService */
 /* @var $complaintService frontend\components\ComplaintService */

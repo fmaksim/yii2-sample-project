@@ -2,7 +2,7 @@
 
 namespace frontend\models;
 
-use frontend\components\storage\Storage;
+use common\components\storage\Storage;
 use frontend\components\LikeService;
 use yii\db\ActiveRecord;
 
@@ -54,6 +54,11 @@ class Post extends \yii\db\ActiveRecord
     public function incComplaints()
     {
         $this->complaints++;
+    }
+
+    public function setComplaints(int $value)
+    {
+        $this->complaints = $value;
     }
 
     public static function instantiate($row)

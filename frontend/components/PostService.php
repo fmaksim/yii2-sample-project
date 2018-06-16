@@ -64,27 +64,23 @@ class PostService
 
     public function toggleLike(Post $post): bool
     {
-
         $this->likeService->setType('post');
         return $this->likeService->toggleLike($post);
-
     }
 
     public function complain(User $user, $postId): bool
     {
-
         if ($post = $this->findById($postId)) {
             $userId = $user->getId();
             return $this->complaintService->complain($post, $userId);
         }
 
         return false;
-
     }
 
-    public function getCommentsCount(int $postId): int
+    public function getCommentsCount(int $id): int
     {
-        return $this->redisStorage->get("post:{$postId}:comments");
+        return $this->redisStorage->get("post:{$id}:comments");
     }
 
 }

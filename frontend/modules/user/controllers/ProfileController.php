@@ -3,11 +3,10 @@
 namespace frontend\modules\user\controllers;
 
 use frontend\components\ProfileService;
-use frontend\components\storage\Storage;
+use common\components\storage\Storage;
 use frontend\components\SubscriptionService;
 use Yii;
 use yii\web\Controller;
-use frontend\models\User;
 use yii\web\Response;
 use yii\web\UploadedFile;
 use frontend\modules\user\models\forms\PictureForm;
