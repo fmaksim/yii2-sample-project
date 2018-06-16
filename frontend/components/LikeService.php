@@ -2,7 +2,7 @@
 
 namespace frontend\components;
 
-use frontend\components\storage\RedisStorage;
+use common\components\storage\RedisStorage;
 use yii\base\Component;
 use yii\base\InvalidCallException;
 use Yii;
@@ -10,7 +10,7 @@ use Yii;
 /**
  * Class LikeService -the component provides a unified "like-dislike" mechanism for different types of objects
  * @package frontend\components
- * @property \frontend\components\storage\RedisStorage $storage
+ * @property \common\components\storage\RedisStorage $storage
  * @property string $type post|comment
  * @property int $userId
  */

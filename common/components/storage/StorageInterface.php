@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\components\storage;
+namespace common\components\storage;
 
 use yii\web\UploadedFile;
 

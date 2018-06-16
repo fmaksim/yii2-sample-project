@@ -2,16 +2,15 @@
 
 namespace frontend\components;
 
-use frontend\components\storage\RedisStorage;
+use common\components\storage\RedisStorage;
 use frontend\models\Feed;
 use yii\base\Component;
-use Yii;
 use yii\base\Event;
 
 /**
  * Class FeedService - components provide storing method for handling the post_created event
  * @package frontend\components
- * @property \frontend\components\storage\RedisStorage $storage
+ * @property \common\components\storage\RedisStorage $storage
  */
 class FeedService extends Component
 {

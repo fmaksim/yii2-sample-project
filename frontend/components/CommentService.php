@@ -2,7 +2,7 @@
 
 namespace frontend\components;
 
-use frontend\components\storage\RedisStorage;
+use common\components\storage\RedisStorage;
 use frontend\models\Comment;
 use frontend\models\User;
 use frontend\modules\comment\models\forms\CommentForm;
@@ -11,7 +11,7 @@ use yii\web\NotFoundHttpException;
 /**
  * Class CommentService - business logic for manage comments
  * @package frontend\components
- * @property \frontend\components\storage\RedisStorage $redisStorage
+ * @property \common\components\storage\RedisStorage $redisStorage
  */
 class CommentService
 {

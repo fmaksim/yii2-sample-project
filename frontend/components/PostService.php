@@ -2,8 +2,8 @@
 
 namespace frontend\components;
 
-use frontend\components\storage\RedisStorage;
-use frontend\components\storage\Storage;
+use common\components\storage\RedisStorage;
+use common\components\storage\Storage;
 use frontend\models\Post;
 use frontend\models\User;
 use yii\web\NotFoundHttpException;
@@ -12,8 +12,8 @@ use yii\web\NotFoundHttpException;
  * Class PostService - business logic for managing posts
  * @package frontend\components
  * @property \frontend\components\LikeService $likeService
- * @property \frontend\components\storage\Storage $fileStorage
- * @property \frontend\components\storage\RedisStorage $redisStorage
+ * @property \common\components\storage\Storage $fileStorage
+ * @property \common\components\storage\RedisStorage $redisStorage
  * @property \frontend\components\ComplaintService $complaintService
  */
 class PostService

@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\components\storage;
+namespace common\components\storage;
 
 use Intervention\Image\ImageManager;
 use Yii;
@@ -10,7 +10,7 @@ use yii\helpers\FileHelper;
 
 /**
  * Class Storage - component provide basic methods for manipulate files (resize, store, delete)
- * @package frontend\components\storage
+ * @package common\components\storage
  * @property string $fileName
  */
 class Storage extends Component implements StorageInterface

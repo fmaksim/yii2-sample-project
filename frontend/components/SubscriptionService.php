@@ -2,7 +2,7 @@
 
 namespace frontend\components;
 
-use frontend\components\storage\RedisStorage;
+use common\components\storage\RedisStorage;
 use frontend\models\User;
 use yii\base\Component;
 use Yii;
@@ -10,7 +10,7 @@ use Yii;
 /**
  * Class SubscriptionService - component implements the subscription mechanism for users
  * @package frontend\components
- * @property \frontend\components\storage\RedisStorage $storage
+ * @property \common\components\storage\RedisStorage $storage
  * @property \frontend\models\User $currentUser
  */
 class SubscriptionService extends Component
