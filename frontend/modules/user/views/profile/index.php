@@ -42,22 +42,23 @@ use yii\helpers\Url;
 
                                     ],
                                 ]); ?>
-                                <a href="#" class="btn btn-default">Edit profile</a>
                                 <?php if ($currentUser->getPicture()): ?>
-                                    <?php echo Html::a("Remove photo", ["/user/profile/delete-photo/"],
+                                    <?php echo Html::a(Yii::t('profile', 'Remove photo'),
+                                        ["/user/profile/delete-photo/"],
                                         ["class" => "btn btn-danger"]); ?>
                                 <?php endif; ?>
                                 <hr>
                             <?php else: ?>
                                 <?php if ($currentUser && !$subscriptionService->isFollowed($user)) {
                                     echo Html::a(
-                                        $subscriptionService->isFollowed($user) ? "UnSubscribe" : "Subscribe",
+                                        $subscriptionService->isFollowed($user) ? Yii::t('profile',
+                                            'UnSubscribe') : Yii::t('profile', 'Subscribe'),
                                         ["/user/profile/toggle-subscribe", "id" => $user->id], [
                                         "class" => "btn btn-primary"
                                     ]);
                                 } ?>
                                 <?php if ($currentUser && $subscriptionService->isFollowed($user)) {
-                                    echo Html::a("UnSubscribe",
+                                    echo Html::a(Yii::t('profile', 'UnSubscribe'),
                                         ["/user/profile/toggle-subscribe", "id" => $user->id], [
                                             "class" => "btn btn-primary",
                                             "style" => "margin-left:5px;"
@@ -65,7 +66,8 @@ use yii\helpers\Url;
                                 }
                                 ?>
                                 <?php if ($currentUser and $currentUser->isShowFollowBlock($mutuals = $currentUser->getMutualSubscriptionsTo($user))): ?>
-                                    <h5>Users, who also followed <?php echo Html::encode($user->username); ?></h5>
+                                    <h5><?= Yii::t('profile',
+                                            'Users, who also followed'); ?><?php echo Html::encode($user->username); ?></h5>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <?php foreach ($mutuals as $mutual): ?>
@@ -89,15 +91,17 @@ use yii\helpers\Url;
 
                         <div class="profile-bottom">
                             <div class="profile-post-count">
-                                <span><?php echo count($user->posts); ?> posts</span>
+                                <span><?php echo count($user->posts) . " " . Yii::t('profile', 'posts'); ?></span>
                             </div>
                             <div class="profile-followers">
                                 <a data-target="#followers"
-                                   data-toggle="modal"><?php echo $user->getFollowersCount(); ?> followers</a>
+                                   data-toggle="modal"><?php echo $user->getFollowersCount() . " " . Yii::t('profile',
+                                            'followers'); ?></a>
                             </div>
                             <div class="profile-following">
                                 <a data-target="#subscriptions"
-                                   data-toggle="modal"><?php echo $user->getSubscriptionsCount(); ?> following</a>
+                                   data-toggle="modal"><?php echo $user->getSubscriptionsCount() . " " . Yii::t('profile',
+                                            'following'); ?></a>
                             </div>
                         </div>
                     </article>
@@ -117,7 +121,8 @@ use yii\helpers\Url;
                     <?php else: ?>
                         <div class="col-sm-12 col-xs-12">
                             <div class="row profile-posts">
-                                <?php echo Html::encode($user->username); ?> has not added any posts yet.
+                                <?php echo Html::encode($user->username) . " " . Yii::t('profile',
+                                        'has not added any posts yet'); ?>.
                             </div>
                         </div>
                     <?php endif; ?>
@@ -132,7 +137,7 @@ use yii\helpers\Url;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Subscriptions</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><?= Yii::t('profile', 'Subscriptions'); ?></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -158,7 +163,7 @@ use yii\helpers\Url;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Followers</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><?= Yii::t('profile', 'Followers'); ?></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -173,7 +178,8 @@ use yii\helpers\Url;
                 <?php endforeach; ?>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= Yii::t('common',
+                        'Close'); ?></button>
             </div>
         </div>
     </div>

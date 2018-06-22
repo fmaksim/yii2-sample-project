@@ -76,6 +76,14 @@ class PostForm extends Model
 
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'description' => Yii::t('create-post', 'description'),
+            'filename' => Yii::t('create-post', 'filename'),
+        ];
+    }
+
     private function getMaxFileSize()
     {
         return Yii::$app->params["maxFileSize"];
