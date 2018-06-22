@@ -73,7 +73,7 @@ use yii\web\JqueryAsset;
                                                 "/post/default/view",
                                                 "id" => $feedItem->post_id
                                             ]) ?>#comments"><?php echo $postService->getCommentsCount($feedItem->post_id); ?>
-                                                Comments</a>
+                                                <?= Yii::t('post', 'Comments'); ?></a>
 
                                         </div>
                                         <div class="post-date">
@@ -82,12 +82,13 @@ use yii\web\JqueryAsset;
                                         <div class="post-report">
                                             <?php if ($complaintService->isComplain($feedItem->post_id,
                                                 $currentUser->getId())): ?>
-                                                <span>You already complained!</span>
+                                                <span><?= Yii::t('post', 'You already complained!'); ?></span>
                                             <?php else: ?>
                                                 <a href="javascript:;" class="btn btn-default button-complain"
                                                    data-id="<?php echo $feedItem->post_id; ?>">
-                                                    Report post <i class="fa fa-cog fa-spin fa-fw icon-placeholder"
-                                                                   style="display: none;"></i></a>
+                                                    <?= Yii::t('post', 'Report post'); ?> <i
+                                                            class="fa fa-cog fa-spin fa-fw icon-placeholder"
+                                                            style="display: none;"></i></a>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -97,7 +98,7 @@ use yii\web\JqueryAsset;
                         <?php else: ?>
 
                             <div class="col-md-12">
-                                Nobody posted yet!
+                                <?= Yii::t('post', 'Nobody posted yet!'); ?>
                             </div>
 
                         <?php endif; ?>

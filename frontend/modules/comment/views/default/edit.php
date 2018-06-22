@@ -10,15 +10,15 @@ use yii\helpers\Html;
 
 ?>
 <div class="post-default-index">
-    <h1>Edit comment</h1>
+    <h1><?= Yii::t('comment', 'Edit comment'); ?></h1>
 
     <?php $form = ActiveForm::begin(); ?>
 
     <?php echo $form->field($comment, "text")->textarea(['rows' => 5]); ?>
 
-    <?php echo Html::submitButton("Edit comment", ["class" => "btn btn-primary"]); ?>
+    <?php echo Html::submitButton(Yii::t('comment', 'Save'), ["class" => "btn btn-primary"]); ?>
 
     <?php ActiveForm::end(); ?>
-
+    <br>
 </div>
 

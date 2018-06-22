@@ -66,7 +66,8 @@ use yii\helpers\HtmlPurifier;
                                     <a href="<?php echo Url::to([
                                         "/post/default/view",
                                         "id" => $post->id
-                                    ]) ?>#comments"><?php echo count($post->comments); ?> Comments</a>
+                                    ]) ?>#comments"><?php echo count($post->comments); ?> <?= Yii::t('post',
+                                            'Comments'); ?></a>
 
                                 </div>
                                 <div class="post-date">
@@ -74,12 +75,13 @@ use yii\helpers\HtmlPurifier;
                                 </div>
                                 <div class="post-report">
                                     <?php if ($complaintService->isComplain($post->getId(), $currentUser->getId())): ?>
-                                        <span>You already complained!</span>
+                                        <span><?= Yii::t('post', 'You already complained!'); ?></span>
                                     <?php else: ?>
                                         <a href="javascript:;" class="btn btn-default button-complain"
                                            data-id="<?php echo $post->getId(); ?>">
-                                            Report post <i class="fa fa-cog fa-spin fa-fw icon-placeholder"
-                                                           style="display: none;"></i></a>
+                                            <?= Yii::t('post', 'Report post'); ?> <i
+                                                    class="fa fa-cog fa-spin fa-fw icon-placeholder"
+                                                    style="display: none;"></i></a>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -92,27 +94,29 @@ use yii\helpers\HtmlPurifier;
                                 <div class="col-md-12">
                                     <?php $commentForm = ActiveForm::begin(["action" => "/post/" . $post->id . "/comment"]); ?>
                                     <div class="form-group">
-                                        <h3>Post a comment</h3>
+                                        <h3><?= Yii::t('comment', 'Post a comment'); ?></h3>
                                     </div>
                                     <div class="form-group">
-                                        <label for="post-comment">Your comment</label>
+                                        <label for="post-comment"><?= Yii::t('comment', 'Your comment'); ?></label>
                                         <textarea name="text" class="form-control" id="post-comment"
                                                   rows="3"></textarea>
                                     </div>
-                                    <?php echo Html::submitButton("Add comment", ["class" => "btn btn-primary"]); ?>
+                                    <?php echo Html::submitButton(Yii::t('comment', 'Add comment'),
+                                        ["class" => "btn btn-primary"]); ?>
                                     <?php ActiveForm::end(); ?>
                                 </div>
                             <?php endif; ?>
 
                             <?php if (count($post->comments) > 0): ?>
                                 <div class="col-md-12">
-                                    <h3>Comments:</h3>
+                                    <h3><?= Yii::t('comment', 'Comments'); ?>:</h3>
                                     <?php foreach ($post->comments as $comment): ?>
 
                                         <div class="well">
                                             <?php echo $comment->getDate() . " " . $comment->username; ?>
                                             <?php if (Yii::$app->user->identity && $comment->user_id === Yii::$app->user->identity->getId()): ?>
-                                                <?php echo Html::a('Edit', ["/comment/edit/" . $comment->id],
+                                                <?php echo Html::a(Yii::t('comment', 'Edit'),
+                                                    ["/comment/edit/" . $comment->id],
                                                     ["class" => "pull-right"]) ?>
                                                 <?php $deleteCommentForm = ActiveForm::begin([
                                                     "action" => "/comment/delete/" . $comment->id,
@@ -121,7 +125,8 @@ use yii\helpers\HtmlPurifier;
                                                         'class' => 'pull-right'
                                                     ],
                                                 ]); ?>
-                                                <?php echo Html::a("Remove", ["/comment/delete/" . $comment->id],
+                                                <?php echo Html::a(Yii::t('comment', 'Remove'),
+                                                    ["/comment/delete/" . $comment->id],
                                                     [
                                                         "class" => "remove-comment",
                                                         "data-form" => "form" . $comment->id

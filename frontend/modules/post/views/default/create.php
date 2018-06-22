@@ -20,6 +20,6 @@ use yii\helpers\Html;
     <?php echo Html::submitButton(Yii::t('create-post', 'Add post'), ["class" => "btn btn-primary"]); ?>
 
     <?php ActiveForm::end(); ?>
-
+    <br>
 </div>
 

@@ -3,6 +3,7 @@
 namespace frontend\modules\comment\models\forms;
 
 use yii\base\Model;
+use Yii;
 
 class CommentForm extends Model
 {
@@ -25,6 +26,13 @@ class CommentForm extends Model
     public function formName()
     {
         return '';
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'text' => Yii::t('comment', 'text'),
+        ];
     }
 
 }
