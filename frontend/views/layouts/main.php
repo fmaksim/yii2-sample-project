@@ -50,7 +50,7 @@ FontAwesomeAsset::register($this);
                                 'en-US' => 'English',
                                 'ru-RU' => 'Русский',
                             ]); ?>
-                            <?= Html::submitButton('Change'); ?>
+                            <?= Html::submitButton(Yii::t('common', 'Change')); ?>
                             <?= Html::endForm(); ?>
                         </li>
                     </ul>

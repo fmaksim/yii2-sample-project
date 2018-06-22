@@ -440,6 +440,10 @@ footer .footer p.text {
     text-decoration: none;
 }
 
+.profile-followers, .profile-following:hover {
+    cursor: pointer;
+}
+
 .profile .profile-followers {
     position: relative;
     display: inline-block;
