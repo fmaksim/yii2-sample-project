@@ -43,7 +43,15 @@ FontAwesomeAsset::register($this);
                 <div class="col-md-4 col-sm-4 navicons-topbar">
                     <ul>
                         <li class="blog-search">
-                            <a href="#" title="Search"><i class="fa fa-search"></i></a>
+                        </li>
+                        <li>
+                            <?= Html::beginForm('/site/language/'); ?>
+                            <?= Html::dropDownList('language', Yii::$app->language, [
+                                'en-US' => 'English',
+                                'ru-RU' => 'Русский',
+                            ]); ?>
+                            <?= Html::submitButton('Change'); ?>
+                            <?= Html::endForm(); ?>
                         </li>
                     </ul>
                 </div>
@@ -56,21 +64,27 @@ FontAwesomeAsset::register($this);
                     <nav class="main-menu">
                         <?php
                         $menuItems = [
-                            ['label' => 'Home', 'url' => ['/']],
+                            ['label' => Yii::t('menu', 'Home'), 'url' => ['/']],
                         ];
                         if (Yii::$app->user->isGuest) {
-                            $menuItems[] = ['label' => 'Signup', 'url' => ['/user/default/signup']];
-                            $menuItems[] = ['label' => 'Login', 'url' => ['/user/default/login']];
+                            $menuItems[] = ['label' => Yii::t('menu', 'Signup'), 'url' => ['/user/default/signup']];
+                            $menuItems[] = ['label' => Yii::t('menu', 'Login'), 'url' => ['/user/default/login']];
                         } else {
                             $menuItems[] = [
-                                'label' => 'My Profile',
+                                'label' => Yii::t('menu', 'My Profile'),
                                 'url' => ['/user/profile/view', 'nickname' => Yii::$app->user->identity->getNickname()]
                             ];
-                            $menuItems[] = ['label' => 'Create post', 'url' => ['/post/default/create']];
+                            $menuItems[] = [
+                                'label' => Yii::t('menu', 'Create post'),
+                                'url' => ['/post/default/create']
+                            ];
                             $menuItems[] = '<li>'
                                 . Html::beginForm(['/user/default/logout'], 'post')
                                 . Html::submitButton(
-                                    'Logout (' . Yii::$app->user->identity->username . ') <i class="fa fa-sign-out"></i>',
+                                    Yii::t('menu', 'Logout ({username})', [
+                                        'username' => Yii::$app->user->identity->username
+                                    ]) .
+                                    ' <i class="fa fa-sign-out"></i>',
                                     ['class' => 'btn btn-link logout']
                                 )
                                 . Html::endForm()
